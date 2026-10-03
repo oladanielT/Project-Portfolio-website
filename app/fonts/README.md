@@ -1,0 +1,1 @@
+The existing Google Fonts Latin WOFF2 subsets are self-hosted here so builds do not depend on Google Fonts availability. Newsreader and Inter are variable fonts; IBM Plex Mono contains weights 400 and 500. The original fonts are distributed under the SIL Open Font License; see the accompanying family license files.

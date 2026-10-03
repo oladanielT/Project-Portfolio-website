@@ -1,0 +1,291 @@
+{
+  "hero": {
+    "eyebrow": "Business & Operations Strategist",
+    "name": "Oluwapelumi Tiwaloluwa Ayodeji",
+    "title": "Operations Officer / Product Manager",
+    "intro": "I'm a Product Manager and Operations Leader with experience across technology, logistics, e-commerce, and digital products. I help move products from idea to execution, defining roadmaps, prioritizing backlogs, coordinating sprints, and leading cross-functional teams.",
+    "photo": "https://res.cloudinary.com/ccd2uu5i/image/upload/v1789498033/portfolio-avatars/cfhs7vbiv42rnhclkyjd.jpg",
+    "ctaLabel": "View my work"
+  },
+  "about": {
+    "paragraphs": [
+      "I'm a Product Manager and Operations Leader with experience across technology, logistics, e-commerce, and digital products. From defining roadmaps and product requirements to prioritizing backlogs, coordinating sprints, and leading cross-functional teams, I help move products from ideas to execution.",
+      "My experience has taught me to balance three things that matter to every successful product: what users need, what the business needs, and what the team can realistically build.",
+      "I'm continuously learning, building, and evolving as a product professional."
+    ],
+    "stat": {
+      "value": "3+",
+      "label": "Projects completed"
+    },
+    "photo": "https://res.cloudinary.com/ccd2uu5i/image/upload/v1789498033/portfolio-avatars/cfhs7vbiv42rnhclkyjd.jpg",
+    "heading": "The person behind the process."
+  },
+  "services": [
+    {
+      "title": "Product Strategy",
+      "description": "Backed by real experience delivering results."
+    },
+    {
+      "title": "Product Roadmapping",
+      "description": "Backed by real experience delivering results."
+    },
+    {
+      "title": "Agile & Sprint Planning",
+      "description": "Backed by real experience delivering results."
+    }
+  ],
+  "skills": [
+    "Product Strategy",
+    "Product Roadmapping",
+    "Agile",
+    "Sprint Planning",
+    "Product Requirements Document (PRD)",
+    "User Stories & Acceptance Criteria",
+    "Product Lifecycle Management"
+  ],
+  "projects": [
+    {
+      "title": "Exampreps360",
+      "org": "Mediprep",
+      "cover": "https://res.cloudinary.com/ccd2uu5i/image/upload/v1789567473/portfolio-project-covers/v16x170pdjndigdtdgpo.jpg",
+      "description": "ExamPreps360 is an EdTech platform that helps students prepare for major Nigerian examinations through structured practice questions, detailed explanations, and learning resources. It matters because it makes quality, accessible, and organized exam preparation available digitally, helping students practise smarter and improve their readiness for important exams.",
+      "stats": [
+        "Successfully launched ExamPreps360, taking the product from concept and PRD through development to a live platform.",
+        "6 major exam categories supported, including JAMB, WAEC, NECO, Post-UTME, BECE, and NCEE.",
+        "Coordinated cross-functional teams and sprint execution, aligning product development with large-scale exam content production."
+      ],
+      "caseStudyUrl": "https://www.exampreps360.online/",
+      "slug": "exampreps360",
+      "category": "EdTech \u00b7 Product delivery",
+      "role": "Product Manager \u00b7 10 months",
+      "featured": true,
+      "blocks": [
+        {
+          "heading": "01 The challenge",
+          "body": "Building the product required coordinating two major workstreams simultaneously: technology development and large-scale academic content production, while ensuring both remained aligned with the product vision and launch objectives."
+        },
+        {
+          "heading": "02 My approach",
+          "body": "I approached the challenge by first defining the product vision and translating it into a clear PRD and actionable roadmap. I then assembled and coordinated the development and exam-content teams, prioritized deliverables, organized sprints and regular reviews, and kept both workstreams aligned through testing and iteration until ExamPreps360 was successfully launched."
+        },
+        {
+          "heading": "03 The result",
+          "body": "Successfully moved the product from idea to launch, creating a live and growing EdTech platform serving students preparing for WAEC, NECO, JAMB, Post-UTME and other examinations."
+        }
+      ]
+    },
+    {
+      "title": "Food Delivery Application",
+      "org": "Foodmart Express Nigeria Limited",
+      "cover": "https://res.cloudinary.com/ccd2uu5i/image/upload/v1789565270/portfolio-project-covers/cidpp79pgmtsx4p52w5r.png",
+      "description": "Food delivery and on-demand logistics were not new concepts. Similar products had already been built and validated in larger Nigerian cities. However, the opportunity we identified was different: Ile-Ife remained largely underserved by this type of technology-enabled delivery service. Residents still faced everyday challenges around convenience and access\u2014getting meals, groceries, market items, medicines, parcels, and other essentials delivered without having to make the trip themselves. While solutions to these problems existed elsewhere, they were not readily accessible within the local market. That presented a clear product opportunity for us: not necessarily to invent a new concept, but to make an existing solution accessible, relevant, and operationally viable for a market that had been overlooked.",
+      "stats": [
+        "3,000+ Users Acquired",
+        "5,000+ Deliveries Completed",
+        "6 Service Categories Launched"
+      ],
+      "caseStudyUrl": "https://foodmartex.online/",
+      "slug": "foodmart-express",
+      "category": "Commerce \u00b7 Operations",
+      "role": "Product & Operations Lead \u00b7 18 months",
+      "featured": false,
+      "blocks": [
+        {
+          "heading": "01 The challenge",
+          "body": "On-demand delivery was already established in larger cities, but Ile-Ife had limited access to reliable technology-enabled delivery services. The opportunity wasn\u2019t to reinvent delivery\u2014it was to make it accessible and practical for an underserved local market."
+        },
+        {
+          "heading": "02 My approach",
+          "body": "As COO & Product Manager, I worked across strategy and execution\u2014identifying user pain points, defining product requirements, prioritizing features, managing the roadmap, coordinating cross-functional teams and sprints, gathering feedback, and supporting product launches and iterations. We launched FoodMartex initially as a restaurant delivery platform, learning directly from customers, vendors, and day-to-day operations. These insights shaped our product roadmap and led us to expand into local market shopping, supermarkets, pharmacies, laundry, and parcel delivery."
+        },
+        {
+          "heading": "03 The result",
+          "body": "FoodMartex evolved from a food-delivery product into a multi-service local commerce and logistics platform, achieving: 3,000+ Registered Users \u2022 5,000+ Deliveries \u2022 6 Service Categories"
+        }
+      ]
+    },
+    {
+      "title": "Product Manager",
+      "org": "Novafoundry Technologies",
+      "cover": "https://res.cloudinary.com/ccd2uu5i/image/upload/v1789568643/portfolio-project-covers/ah3co24gskhdhknrknik.jpg",
+      "description": "NovaFoundry was created from a simple observation: great digital products require more than great developers\u2014they require the right people working together. After working across several technology projects, I helped bring together a cross-functional team of engineers, designers, QA, cybersecurity, and product professionals under one structure. This enabled us to manage projects in-house from discovery and planning to design, development, testing, and delivery. My role spans product strategy, client discovery, project scoping, team coordination, sprint execution, stakeholder management, and delivery, ensuring that client ideas are transformed into structured and executable digital products.",
+      "stats": [
+        "6+ Projects Delivered",
+        "Multi-Disciplinary Team Design \u2022 Web \u2022 Mobile \u2022 QA \u2022 Security",
+        "6 Months Active Delivery"
+      ],
+      "caseStudyUrl": "https://www.novafoundry.org/",
+      "slug": "novafoundry",
+      "category": "Technology \u00b7 Product management",
+      "role": "Team Lead / Project coordinator \u00b7 6 months",
+      "featured": false,
+      "blocks": [
+        {
+          "heading": "01 The challenge",
+          "body": "After working on several digital projects, I noticed a recurring challenge: delivering a complete product often required sourcing developers, designers, and other specialists separately for each project. This created gaps in communication, coordination, and delivery."
+        },
+        {
+          "heading": "02 My approach",
+          "body": "That insight led to NovaFoundry Technologies \u2014 bringing complementary technology professionals under one structure to deliver projects collaboratively. We built a cross-functional team comprising frontend and backend engineers, mobile developers, UI/UX and graphic designers, QA professionals, cybersecurity specialists, and other technical talents. Instead of repeatedly outsourcing critical roles, we created an in-house structure capable of taking projects from idea and product planning through design, development, testing, and delivery."
+        },
+        {
+          "heading": "03 The result",
+          "body": "Within its first 6 months of active operations, NovaFoundry successfully delivered 6+ website projects for businesses, taking client requirements from initial discussions through planning, design, development, and deployment. The company has also built a growing pipeline of prospective web and mobile application projects, demonstrating its ability to progress from assembling a cross-functional technology team to attracting and delivering real client work."
+        }
+      ]
+    }
+  ],
+  "testimonial": {
+    "quote": "Tiwaloluwa brings a rare combination of strategic thinking and hands-on execution. She takes ownership, coordinates people effectively, and consistently finds practical ways to move the business forward.",
+    "name": "Dr Tolulope Okedere",
+    "role": "Chief Executive Officer, FoodMartex"
+  },
+  "contact": {
+    "heading": "Have a role or project in mind?",
+    "subheading": "I'd love to hear from you.",
+    "email": "tiwaloluwaoluwapelumi@gmail.com",
+    "location": "Lagos, Nigeria",
+    "linkedin": "",
+    "github": "",
+    "cv": "",
+    "formEnabled": true
+  },
+  "template": "noir",
+  "theme": "elegant",
+  "organizations": [
+    {
+      "name": "Mediprep",
+      "detail": "EdTech",
+      "url": ""
+    },
+    {
+      "name": "Foodmart Express",
+      "detail": "Commerce & logistics",
+      "url": ""
+    },
+    {
+      "name": "Novafoundry",
+      "detail": "Digital products",
+      "url": ""
+    }
+  ],
+  "expertise": [
+    {
+      "title": "Product Strategy",
+      "description": "Connecting user needs, business goals, and what the team can realistically build.",
+      "skills": [
+        "Product Strategy",
+        "Product Roadmapping",
+        "Product Lifecycle Management",
+        "Agile",
+        "Sprint planning",
+        "Product Requirements Document (PRD)",
+        "User Stories & Acceptance Criteria"
+      ]
+    },
+    {
+      "title": "Delivery & execution",
+      "description": "Turning ideas into clear requirements, focused sprints, and coordinated delivery.",
+      "skills": [
+        "Agile & sprint planning",
+        "Product requirements (PRD)",
+        "User stories & acceptance criteria"
+      ]
+    },
+    {
+      "title": "Business & operations",
+      "description": "Bringing people, processes, and priorities together across technology, logistics, and commerce.",
+      "skills": [
+        "Cross-functional coordination",
+        "Content operations",
+        "Team collaboration"
+      ]
+    }
+  ],
+  "process": [
+    {
+      "title": "Understand",
+      "description": "Start with the people, the problem, and the business behind the product."
+    },
+    {
+      "title": "Define",
+      "description": "Translate needs into requirements, priorities, and a practical roadmap."
+    },
+    {
+      "title": "Deliver",
+      "description": "Coordinate the team, organize sprints, and move the work forward."
+    }
+  ],
+  "tools": [
+    {
+      "name": "Jira",
+      "purpose": "Tool",
+      "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jira/jira-original.svg"
+    },
+    {
+      "name": "Trello",
+      "purpose": "Tool",
+      "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/trello/trello-original.svg"
+    },
+    {
+      "name": "Figma",
+      "purpose": "Tool",
+      "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/figma/figma-original.svg"
+    },
+    {
+      "name": "Google Workspace",
+      "purpose": "Tool",
+      "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/google/google-original.svg"
+    },
+    {
+      "name": "Slack",
+      "purpose": "Tool",
+      "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/slack/slack-original.svg"
+    },
+    {
+      "name": "Notion",
+      "purpose": "Tool",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/e/e9/Notion-logo.svg"
+    },
+    {
+      "name": "Google Analytics",
+      "purpose": "Tool",
+      "logo": "https://www.vectorlogo.zone/logos/google_analytics/google_analytics-icon.svg"
+    },
+    {
+      "name": "GitHub",
+      "purpose": "Tool",
+      "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg"
+    },
+    {
+      "name": "ChatGPT",
+      "purpose": "Tool",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg"
+    }
+  ],
+  "sections": {
+    "organizations": true,
+    "about": true,
+    "work": true,
+    "expertise": true,
+    "process": false,
+    "tools": true,
+    "testimonial": true
+  },
+  "seo": {
+    "title": "Oluwapelumi Tiwaloluwa Ayodeji \u2014 Product & Operations",
+    "description": "I'm a Product Manager and Operations Leader with experience across technology, logistics, e-commerce, and digital products. I help move products from idea to execution, defining roadmaps, prioritizing backlogs, coordinating sprints, and leading cross-functional teams."
+  },
+  "testimonials": [
+    {
+      "quote": "Mrs Tiwaloluwa has a remarkable ability to take an idea, break it into actionable steps, and coordinate the right people to bring it to life. She combines strong product thinking with an excellent understanding of business and operations.",
+      "name": "Oge Obubu",
+      "role": "Chief Technology Officer, FoodMartex"
+    },
+    {
+      "quote": "Tiwaloluwa brings a rare combination of strategic thinking and hands-on execution. She takes ownership, coordinates people effectively, and consistently finds practical ways to move the business forward.",
+      "name": "Dr Tolulope Okedere",
+      "role": "Chief Executive Officer, FoodMartex"
+    }
+  ]
+}

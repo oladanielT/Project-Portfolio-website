@@ -1,0 +1,24 @@
+/* NEW ARCHITECT CLASSES */
+[data-template="architect"] .architect-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+[data-template="architect"] .architect-cell {
+  padding: 40px;
+  border-right: 1px solid var(--line);
+}
+[data-template="architect"] .architect-cell:last-child {
+  border-right: none;
+}
+[data-template="architect"] .architect-table-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr auto;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--line);
+  align-items: center;
+}
+[data-template="architect"] .architect-table-row:hover {
+  background: var(--surface);
+}

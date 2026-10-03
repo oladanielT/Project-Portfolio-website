@@ -1,0 +1,74 @@
+/* BENTO SPECIFIC STYLES */
+[data-template="bento"] {
+  --bento-gap: 1.5rem;
+  --bento-radius: 24px;
+  background: var(--surface-deep); /* Use deep background so cards pop */
+}
+
+[data-template="bento"] .bento-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-auto-rows: minmax(100px, auto);
+  gap: var(--bento-gap);
+}
+
+[data-template="bento"] .bento-card {
+  background: var(--surface);
+  border-radius: var(--bento-radius);
+  padding: 2.5rem;
+  border: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-template="bento"] .bento-card:hover {
+  transform: translateY(-4px);
+}
+
+/* Specific Grid Placements */
+[data-template="bento"] .bento-hero-intro {
+  grid-column: span 8;
+  grid-row: span 3;
+  justify-content: center;
+}
+
+[data-template="bento"] .bento-hero-portrait {
+  grid-column: span 4;
+  grid-row: span 3;
+  padding: 0;
+}
+
+[data-template="bento"] .bento-stat-card {
+  grid-column: span 4;
+  grid-row: span 2;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+[data-template="bento"] .bento-work-card {
+  grid-column: span 6;
+  grid-row: span 4;
+  padding: 0;
+}
+
+[data-template="bento"] .bento-work-card.featured {
+  grid-column: span 12;
+  grid-row: span 5;
+}
+
+[data-template="bento"] .bento-work-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 2rem;
+  background: linear-gradient(transparent, rgba(var(--background-rgb, 0,0,0), 0.9));
+  color: var(--foreground);
+}
