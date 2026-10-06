@@ -28,21 +28,20 @@
   line-height: 1.5;
 }
 
-/* ── Dark mode (hard values, so it wins over any light theme variables) ── */
-[data-template="noir"] .nx[data-theme="dark"],
-.nx[data-template="noir"][data-theme="dark"] {
-  --nx-bg: #0c0e0d;
-  --nx-fg: #f3f3ee;
-  --nx-on-accent: var(--accent-foreground, #14120a);
-  --nx-surface: color-mix(in srgb, #0c0e0d 92%, #f3f3ee);
-  --nx-line: color-mix(in srgb, #f3f3ee 14%, transparent);
-  --nx-muted: color-mix(in srgb, #f3f3ee 62%, #0c0e0d);
-  --nx-band: #050706;
-  --nx-band-fg: #f3f3ee;
-  --nx-band-muted: color-mix(in srgb, #f3f3ee 68%, transparent);
-  --nx-band-line: color-mix(in srgb, #f3f3ee 18%, transparent);
+/* Noir surfaces track the selected admin palette, including its dark variants. */
+[data-template="noir"] .nx:is([data-theme="dark"], [data-theme="pitch-black"], [data-theme="vibrant"], [data-theme="sunset"], [data-theme="ocean"], [data-theme="forest"], [data-theme="candy"]) {
+  --nx-bg: var(--background);
+  --nx-fg: var(--foreground);
+  --nx-on-accent: var(--accent-foreground, var(--background));
+  --nx-surface: var(--surface);
+  --nx-line: var(--line);
+  --nx-muted: var(--muted);
+  --nx-band: var(--surface-deep, var(--surface));
+  --nx-band-fg: var(--foreground);
+  --nx-band-muted: var(--muted);
+  --nx-band-line: var(--line);
 }
-[data-template="noir"] .nx[data-theme="dark"] .nx-btn--light { color: #0a0d0b; }
+[data-template="noir"] .nx:is([data-theme="dark"], [data-theme="pitch-black"], [data-theme="vibrant"], [data-theme="sunset"], [data-theme="ocean"], [data-theme="forest"], [data-theme="candy"]) .nx-btn--light { color: var(--background); }
 
 [data-template="noir"] .nx *,
 [data-template="noir"] .nx *::before,
@@ -58,7 +57,7 @@
 [data-template="noir"] .nx button { font: inherit; color: inherit; cursor: pointer; }
 [data-template="noir"] .nx :focus-visible { outline: 2px solid var(--nx-accent); outline-offset: 3px; }
 
-[data-template="noir"] .nx-wrap { width: min(1200px, 100% - 2.5rem); margin-inline: auto; }
+[data-template="noir"] .nx-wrap { width: min(1200px, calc(100% - 2.5rem)); margin-inline: auto; }
 [data-template="noir"] .nx-center { text-align: center; }
 [data-template="noir"] .nx-left { text-align: left; }
 [data-template="noir"] .nx-accent { color: var(--nx-accent); }
@@ -72,7 +71,7 @@
 }
 [data-template="noir"] .nx .nx-btn:hover { transform: translateY(-2px); }
 [data-template="noir"] .nx .nx-btn--dark { background: var(--nx-fg); color: var(--nx-bg); }
-[data-template="noir"] .nx .nx-btn--light { background: var(--nx-band-fg); color: var(--background, #0a0d0b); }
+[data-template="noir"] .nx .nx-btn--light { background: var(--nx-band-fg); color: var(--nx-band); }
 [data-template="noir"] .nx .nx-btn--ghost { padding: .85rem 1.6rem; border-color: var(--nx-fg); background: transparent; }
 [data-template="noir"] .nx .nx-btn--ghost:hover { background: var(--nx-fg); color: var(--nx-bg); }
 [data-template="noir"] .nx .nx-btn--sm { padding: .3rem 1.2rem; font-size: .88rem; min-height: 2.5rem; }
@@ -84,7 +83,7 @@
 [data-template="noir"] .nx .nx-btn:hover .nx-btn-ico { transform: rotate(45deg); }
 
 /* ── Header ── */
-[data-template="noir"] .nx-header { position: fixed; top: .9rem; left: 0; right: 0; z-index: 100; }
+[data-template="noir"] .nx-header { position: fixed; top: max(.65rem, env(safe-area-inset-top)); left: 0; right: 0; z-index: 100; }
 [data-template="noir"] .nx-nav {
   display: flex; align-items: center; justify-content: space-between; gap: 1rem;
   padding: .55rem .6rem .55rem 1rem; border-radius: 999px;
@@ -92,7 +91,8 @@
   -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
   border: 1px solid var(--nx-line);
 }
-[data-template="noir"] .nx-logo { display: inline-flex; align-items: center; gap: .6rem; font-weight: 700; letter-spacing: -.01em; }
+[data-template="noir"] .nx-logo { display: inline-flex; align-items: center; gap: .6rem; min-width: 0; max-width: 100%; font-weight: 700; letter-spacing: -.01em; }
+[data-template="noir"] .nx-nav > .nx-logo { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 [data-template="noir"] .nx-logo-mark {
   width: 2.1rem; height: 2.1rem; border-radius: 50%; display: grid; place-items: center;
   background: var(--nx-accent); color: var(--nx-on-accent); font-size: .85rem; font-weight: 800;
@@ -126,10 +126,12 @@
 
 /* ── Hero ── */
 [data-template="noir"] .nx-hero {
-  height: 100vh;
+  position: relative;
+  isolation: isolate;
+  min-height: min(100svh, 58rem);
   display: flex;
   align-items: center;
-  overflow: hidden;
+  overflow: clip;
   padding: clamp(4rem, 8vw, 6rem) 0 clamp(1.5rem, 4vw, 2.5rem);
 }
 [data-template="noir"] .nx-hero-grid { display: grid; grid-template-columns: 1fr .85fr; gap: 2rem; align-items: center; width: 100%; }
@@ -137,8 +139,8 @@
   display: inline-flex; align-items: center; gap: .4rem; padding: .35rem .8rem;
   border: 1px solid var(--nx-line); background: var(--nx-surface); border-radius: 999px; font-size: .8rem; font-weight: 500;
 }
-[data-template="noir"] .nx-h1 { font-size: clamp(1.2rem, 2.2vw, 1.8rem); line-height: 1.1; font-weight: 700; letter-spacing: -.02em; margin: 1rem 0; }
-[data-template="noir"] .nx-lead { color: var(--nx-muted); max-width: 30rem; font-size: .9rem; }
+[data-template="noir"] .nx-h1 { font-size: clamp(1.2rem, 2.2vw, 1.8rem); line-height: 1.1; font-weight: 700; letter-spacing: -.02em; margin: 1em ; }
+[data-template="noir"] .nx-lead { color: var(--nx-muted); max-width: 30rem; font-size: .9rem; margin: 1rem; }
 [data-template="noir"] .nx-actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.5rem; }
 
 [data-template="noir"] .nx-hero-media { position: relative; justify-self: center; width: min(100%, 220px); aspect-ratio: 1 / 1; }
@@ -167,7 +169,7 @@
 [data-template="noir"] .nx-badge-ico { width: 2.2rem; height: 2.2rem; border-radius: 50%; display: grid; place-items: center; background: var(--nx-accent); color: var(--nx-on-accent); }
 
 /* ── Marquee ── */
-[data-template="noir"] .nx-marquee { background: var(--nx-accent); color: var(--nx-on-accent); overflow: hidden; padding: 1.1rem 0; }
+[data-template="noir"] .nx-marquee { position: relative; z-index: 0; clear: both; background: var(--nx-accent); color: var(--nx-on-accent); overflow: hidden; padding: 1.1rem 0; }
 [data-template="noir"] .nx-marquee-track { display: flex; width: max-content; animation: nx-scroll 32s linear infinite; }
 [data-template="noir"] .nx-marquee:hover .nx-marquee-track { animation-play-state: paused; }
 [data-template="noir"] .nx-marquee-group { display: flex; flex: none; align-items: center; }
@@ -184,6 +186,9 @@
 [data-template="noir"] .nx-h2 { font-size: clamp(1.9rem, 4vw, 3.1rem); line-height: 1.12; font-weight: 700; letter-spacing: -.025em; margin: .8rem 0 0; }
 [data-template="noir"] .nx-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; margin-bottom: 2.5rem; }
 [data-template="noir"] .nx-grid { display: grid; gap: 1.5rem; margin-top: 2.5rem; }
+[data-template="noir"] .nx-grid > *,
+[data-template="noir"] .nx-about-grid > *,
+[data-template="noir"] .nx-contact-grid > * { min-width: 0; }
 [data-template="noir"] .nx-head + .nx-grid { margin-top: 0; }
 [data-template="noir"] .nx-grid--3 { grid-template-columns: repeat(3, 1fr); }
 [data-template="noir"] .nx-grid--2 { grid-template-columns: repeat(2, 1fr); }
@@ -219,19 +224,20 @@
 [data-template="noir"] .nx-stats span { font-size: .85rem; color: var(--nx-band-muted); margin-top: .35rem; }
 
 /* ── Tools ── */
-[data-template="noir"] .nx-tools { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1.1rem; margin-top: 3rem; }
+[data-template="noir"] .nx-tools { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: 1.1rem; margin-top: 3rem; }
 [data-template="noir"] .nx-tool {
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .4rem;
-  padding: 1rem .5rem; border-radius: 999px; background: var(--nx-surface); border: 1px solid var(--nx-line);
-  min-height: 8rem; transition: transform .35s, background .35s, color .35s;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .75rem;
+  padding: 1.25rem .75rem; border-radius: 1.2rem; background: var(--nx-surface); border: 1px solid var(--nx-line);
+  min-height: 10rem; transition: transform .35s, background .35s, color .35s;
 }
-[data-template="noir"] .nx-tool:hover { transform: translateY(-8px); background: var(--nx-accent); color: var(--nx-on-accent); }
+[data-template="noir"] .nx-tool:hover { transform: translateY(-8px); background: var(--nx-surface); color: var(--nx-fg); border-color: var(--nx-accent); }
 [data-template="noir"] .nx-tool-ico {
-  width: 3.4rem; height: 3.4rem; border-radius: 50%; display: grid; place-items: center;
-  background: var(--nx-bg); border: 1px solid var(--nx-line); color: var(--nx-fg); font-weight: 800; text-transform: uppercase;
+  width: 3.6rem; height: 3.6rem; border-radius: 1rem; display: grid; place-items: center;
+  background: #fff; border: 1px solid rgba(0, 0, 0, .08); color: var(--nx-fg); font-weight: 800; text-transform: uppercase;
 }
-[data-template="noir"] .nx-tool strong { font-size: 1.3rem; }
-[data-template="noir"] .nx-tool-name { font-size: .88rem; color: var(--nx-muted); padding: 0 .4rem; word-break: break-word; }
+[data-template="noir"] .nx-tool-logo { width: 2rem; height: 2rem; object-fit: contain; color: var(--tool-mark-color, var(--nx-accent)); }
+[data-template="noir"] .nx-tool-mark { font-size: 1.9rem; line-height: 1; font-weight: 800; color: var(--tool-mark-color, var(--nx-accent)); }
+[data-template="noir"] .nx-tool-name { font-size: .95rem; color: var(--nx-fg); padding: 0 .4rem; word-break: break-word; text-align: center; }
 [data-template="noir"] .nx-tool:hover .nx-tool-name { color: inherit; }
 
 /* ── Projects ── */
@@ -260,10 +266,9 @@
 [data-template="noir"] .nx-journey-row span { color: var(--nx-muted); font-size: .92rem; }
 
 /* ── Testimonials ── */
-[data-template="noir"] .nx-track { display: flex; gap: 1.5rem; overflow-x: auto; scroll-snap-type: x mandatory; padding: 2.5rem 0 1rem; scrollbar-width: none; }
-[data-template="noir"] .nx-track::-webkit-scrollbar { display: none; }
+[data-template="noir"] .nx-track { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; padding: 2.5rem 0 1rem; }
 [data-template="noir"] .nx-quote {
-  flex: 0 0 min(560px, 88%); scroll-snap-align: start; padding: 1.8rem; border-radius: 1.6rem;
+  min-width: 0; padding: 1.8rem; border-radius: 1.6rem;
   background: var(--nx-surface); border: 1px solid var(--nx-line); display: flex; flex-direction: column; gap: 1rem;
 }
 [data-template="noir"] .nx-stars { color: var(--nx-accent); letter-spacing: .2em; }
@@ -325,7 +330,19 @@
 [data-template="noir"] .nx-footer-cols h4 { font-size: 1rem; margin-bottom: .3rem; }
 [data-template="noir"] .nx-footer-cols a:not(.nx-logo) { color: var(--nx-band-muted); transition: color .25s; word-break: break-all; }
 [data-template="noir"] .nx-footer-cols a:not(.nx-logo):hover { color: var(--nx-accent); }
+[data-template="noir"] .nx-social-icon { display: inline-flex; align-items: center; color: inherit; transition: opacity .2s; }
+[data-template="noir"] .nx-social-icon:hover { opacity: 1; }
+[data-template="noir"] .nx-social-icon.is-unconfigured { opacity: .35; }
 [data-template="noir"] .nx-copy { padding-top: 1.5rem; border-top: 1px solid var(--nx-band-line); font-size: .85rem; color: var(--nx-band-muted); }
+[data-template="noir"] .nx-copy span { overflow-wrap: anywhere; }
+
+/* Project detail layout */
+[data-template="noir"] .nx-case-story { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(1.25rem, 3vw, 2.5rem); }
+[data-template="noir"] .nx-case-story > * { min-width: 0; }
+[data-template="noir"] .nx-case-meta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+[data-template="noir"] .nx-case-next { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+[data-template="noir"] .nx-case-next > * { min-width: 0; }
+[data-template="noir"] .nx-case-next > :last-child { text-align: right; }
 
 /* ── Keyframes ── */
 @keyframes nx-scroll { to { transform: translateX(-50%); } }
@@ -339,12 +356,30 @@
 }
 @media (max-width: 860px) {
   [data-template="noir"] .nx-links,
-  [data-template="noir"] .nx-cta-desktop { display: none; }
+  [data-template="noir"] .nx .nx-cta-desktop { display: none; }
   [data-template="noir"] .nx-burger { display: block; }
-  [data-template="noir"] .nx-menu.is-open { display: flex; }
+  [data-template="noir"] .nx-header > .nx-wrap { position: relative; }
+  [data-template="noir"] .nx-menu.is-open {
+    position: absolute;
+    top: calc(100% + .4rem);
+    left: 0;
+    right: 0;
+    display: flex;
+    max-height: calc(100dvh - 6rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    box-shadow: 0 1rem 2rem color-mix(in srgb, var(--nx-fg) 12%, transparent);
+  }
   [data-template="noir"] .nx-hero-grid,
   [data-template="noir"] .nx-about-grid,
   [data-template="noir"] .nx-contact-grid { grid-template-columns: 1fr; }
+  [data-template="noir"] .nx-hero {
+    min-height: 0;
+    padding-top: calc(7rem + env(safe-area-inset-top));
+    padding-bottom: 3rem;
+    overflow: visible;
+  }
+  [data-template="noir"] .nx-hero-grid { gap: 2.25rem; }
   [data-template="noir"] .nx-hero-media { order: -1; width: min(70%, 200px); }
   [data-template="noir"] .nx-hero-copy { text-align: center; display: flex; flex-direction: column; align-items: center; }
   [data-template="noir"] .nx-lead { margin-inline: auto; }
@@ -355,14 +390,42 @@
   [data-template="noir"] .nx-about-media { width: min(80%, 340px); }
   [data-template="noir"] .nx-footer-cols { grid-template-columns: 1fr 1fr; }
   [data-template="noir"] .nx-footer-cols > div:first-child { grid-column: 1 / -1; }
+  [data-template="noir"] .nx-case-story { grid-template-columns: 1fr; }
+  [data-template="noir"] .nx-track { grid-template-columns: 1fr; gap: .75rem; }
+  [data-template="noir"] .nx-quote { padding: 1.35rem; overflow-wrap: anywhere; }
 }
 @media (max-width: 640px) {
+  [data-template="noir"] .nx-wrap { width: calc(100% - 2rem); }
+  [data-template="noir"] .nx-nav { gap: .55rem; padding: .45rem .5rem .45rem .75rem; }
+  [data-template="noir"] .nx-nav > .nx-logo { max-width: calc(100% - 3.5rem); font-size: .9rem; }
+  [data-template="noir"] .nx-logo-mark { width: 1.9rem; height: 1.9rem; flex: none; }
+  [data-template="noir"] .nx-burger { flex: none; }
+  [data-template="noir"] .nx-h1 { overflow-wrap: anywhere; }
+  [data-template="noir"] .nx-head { align-items: flex-start; flex-direction: column; }
+  [data-template="noir"] .nx-sec { padding-block: 3.5rem; }
+  [data-template="noir"] .nx-sec--tight { padding-top: 1.5rem; }
   [data-template="noir"] .nx-grid--3,
   [data-template="noir"] .nx-grid--2 { grid-template-columns: 1fr; }
   [data-template="noir"] .nx-tools { grid-template-columns: repeat(2, 1fr); }
-  [data-template="noir"] .nx-tool { min-height: 7rem; }
+  [data-template="noir"] .nx-tool { min-height: 8rem; padding: 1rem .4rem; }
   [data-template="noir"] .nx-form { grid-template-columns: 1fr; padding: 1.2rem; }
   [data-template="noir"] .nx-footer-top { flex-direction: column; align-items: flex-start; }
+  [data-template="noir"] .nx-footer-cols { grid-template-columns: 1fr; gap: 1.5rem; padding: 2rem 0; margin-top: 2rem; }
+  [data-template="noir"] .nx-footer-cols > div:first-child { grid-column: auto; }
+  [data-template="noir"] .nx-case-meta { grid-template-columns: 1fr; }
+  [data-template="noir"] .nx-case-next { align-items: stretch; flex-direction: column; }
+  [data-template="noir"] .nx-case-next > :last-child { text-align: left; }
+  [data-template="noir"] .nx-stats { gap: 1.25rem; }
+  [data-template="noir"] .nx-contact-grid { gap: 2rem; }
+  [data-template="noir"] .nx-contact-grid .nx-full-btn { justify-self: stretch; justify-content: space-between; }
+  [data-template="noir"] .nx-footer-top .nx-h2 { font-size: clamp(1.8rem, 8vw, 2.6rem); }
+}
+
+@media (max-width: 360px) {
+  [data-template="noir"] .nx-wrap { width: calc(100% - 1.5rem); }
+  [data-template="noir"] .nx-tools { grid-template-columns: 1fr 1fr; gap: .6rem; }
+  [data-template="noir"] .nx-tool-name { font-size: .82rem; }
+  [data-template="noir"] .nx-footer-cols a:not(.nx-logo) { overflow-wrap: anywhere; }
 }
 
 @media (prefers-reduced-motion: reduce) {

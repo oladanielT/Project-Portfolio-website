@@ -11,11 +11,20 @@ export const metadata = {
 export default async function Preview() {
   const session = await adminSession();
   if (!session) redirect("/admin");
-  // Always use the local site.json (defaultContent) instead of the cached DB draft so the user sees the latest updates!
+  const { data, error } = await session.db
+    .from("portfolio_drafts")
+    .select("content")
+    .eq("id", 1)
+    .maybeSingle();
+  if (error) throw new Error("Unable to load the saved portfolio draft.");
+  const content = data?.content ? siteSchema.parse(data.content) : defaultContent;
   return (
-    <TemplateRenderer
-      content={defaultContent}
-      preview
-    />
+    <div
+      className={`draft-preview-theme theme-${content.colorMode || "light"}`}
+      data-template={content.template || "architect"}
+      data-theme={content.colorMode || "light"}
+    >
+      <TemplateRenderer content={content} preview />
+    </div>
   );
 }

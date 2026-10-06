@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { browserClient } from "@/lib/supabase/browser";
 import type { SiteContent } from "@/lib/schema";
+import { projectStorySections } from "@/lib/schema";
 
 type Path = (string | number)[];
 type Revision = { id: number; created_at: string };
@@ -25,6 +26,7 @@ const tabs = [
   ["organizations", "Organizations", "◇"],
   ["tools", "Your toolkit", "⌘"],
   ["testimonial", "Testimonial", "“"],
+  ["faqs", "Frequently asked questions", "?"],
   ["contact", "Contact & links", "↗"],
   ["media", "Media library", "▧"],
   ["inquiries", "Inquiries", "✉"],
@@ -701,6 +703,25 @@ export default function Editor({
                       {field("Your role", ["projects", i, "role"])}
                       {field("Overview", ["projects", i, "description"], true)}
                       {image("Project cover", ["projects", i, "cover"])}
+                      <h3 className="subsection-title">Project story</h3>
+                      <Field
+                        label="The challenge"
+                        value={p.challenge || projectStorySections(p).find((b) => /challenge/i.test(b.heading))?.body || ""}
+                        large
+                        onChange={(v) => update(["projects", i, "challenge"], v)}
+                      />
+                      <Field
+                        label="My approach"
+                        value={p.approach || projectStorySections(p).find((b) => /approach/i.test(b.heading))?.body || ""}
+                        large
+                        onChange={(v) => update(["projects", i, "approach"], v)}
+                      />
+                      <Field
+                        label="The result"
+                        value={p.result || projectStorySections(p).find((b) => /result/i.test(b.heading))?.body || ""}
+                        large
+                        onChange={(v) => update(["projects", i, "result"], v)}
+                      />
                       <Field
                         label="Results / outcomes"
                         value={p.stats.join("\n")}
@@ -940,10 +961,57 @@ export default function Editor({
                 </Panel>
               )}
               {tab === "testimonial" && (
-                <Panel title="A voice of confidence">
-                  {field("Quote", ["testimonial", "quote"], true)}
-                  {field("Person’s name", ["testimonial", "name"])}
-                  {field("Role and organization", ["testimonial", "role"])}
+                <Panel
+                  title="Client testimonials"
+                  description="These saved testimonials are shared across portfolio templates."
+                >
+                  {(content.testimonials || []).map((testimonial, i) => (
+                    <div className="collection-item" key={i}>
+                      {field("Quote", ["testimonials", i, "quote"], true)}
+                      {field("Person’s name", ["testimonials", i, "name"])}
+                      {field("Role and organization", ["testimonials", i, "role"])}
+                      {actions(["testimonials"], i)}
+                    </div>
+                  ))}
+                  <button
+                    className="admin-button"
+                    onClick={() =>
+                      update(
+                        ["testimonials"],
+                        [
+                          ...(content.testimonials || []),
+                          { quote: "", name: "", role: "" },
+                        ],
+                      )
+                    }
+                  >
+                    Add testimonial +
+                  </button>
+                </Panel>
+              )}
+              {tab === "faqs" && (
+                <Panel
+                  title="Frequently asked questions"
+                  description="Manage FAQ content here for portfolio templates that include an FAQ section."
+                >
+                  {(content.faqs || []).map((faq, i) => (
+                    <div className="collection-item" key={i}>
+                      {field("Question", ["faqs", i, "question"])}
+                      {field("Answer", ["faqs", i, "answer"], true)}
+                      {actions(["faqs"], i)}
+                    </div>
+                  ))}
+                  <button
+                    className="admin-button"
+                    onClick={() =>
+                      update(
+                        ["faqs"],
+                        [...(content.faqs || []), { question: "", answer: "" }],
+                      )
+                    }
+                  >
+                    Add question +
+                  </button>
                 </Panel>
               )}
               {tab === "contact" && (
@@ -1016,6 +1084,7 @@ export default function Editor({
                                 process: "Working approach",
                                 tools: "Toolkit",
                                 testimonial: "Testimonial",
+                                faqs: "Frequently asked questions",
                               } as Record<string, string>
                             )[key]
                           }
@@ -1046,10 +1115,6 @@ export default function Editor({
                         <option value="noir">04 — Noir (Pitch Black Luxury)</option>
                         <option value="bold">05 — The Bold (Brutalist / Experimental)</option>
                         <option value="aurora">06 — Aurora (Organic Gradients)</option>
-                        <option value="glass">07 — Glass Studio (Floating UI)</option>
-                        <option value="memphis">08 — Neo Memphis (Playful Shapes)</option>
-                        <option value="motion">09 — Motion Grid (3D Spatial)</option>
-                        <option value="editorial">10 — Editorial (Magazine / Art Direction)</option>
                         <option value="elegant">-- Legacy Classic --</option>
                       </select>
                     </label>

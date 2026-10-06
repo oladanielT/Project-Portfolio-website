@@ -3,7 +3,9 @@ import { useRef } from "react";
 import Image from "./Media";
 import Link from "next/link";
 import type { SiteContent } from "@/lib/schema";
-import { Arrow, VisionaryFooter, VisionaryHeader } from "./Chrome";
+import { projectStorySections } from "@/lib/schema";
+import { Arrow, VisionaryHeader } from "./Chrome";
+import TemplateFooter from "../common/TemplateFooter";
 import MotionScene from "./MotionScene";
 import "./styles.css";
 
@@ -18,6 +20,7 @@ export default function VisionaryCaseStudy({
 }) {
   const root = useRef<HTMLDivElement>(null);
   const project = c.projects[index];
+  const storySections = projectStorySections(project);
   const next = c.projects[(index + 1) % c.projects.length];
   const base = preview ? "/admin/preview/" : "/";
   return (
@@ -87,7 +90,7 @@ export default function VisionaryCaseStudy({
                 </ul>
               </section>
             )}
-            {project.blocks.map((block, i) => (
+            {storySections.map((block, i) => (
               <section className="v-case-block" key={i} data-v-reveal>
                 <h2>{block.heading}</h2>
                 <p className="v-body">{block.body}</p>
@@ -131,7 +134,7 @@ export default function VisionaryCaseStudy({
           </Link>
         </div>
       </main>
-      <VisionaryFooter content={c} base={base} />
+      <TemplateFooter content={c} templateVariant="visionary" base={base === "/" ? "" : base} />
     </div>
   );
 }

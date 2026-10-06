@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { FormEvent } from "react";
 import type { SiteContent, Project } from "@/lib/schema";
 import Nav from "../../Nav";
 import MotionScene from "./MotionScene";
-import ContactForm from "../../ContactForm";
 const Arrow = () => <span aria-hidden="true">↗</span>;
 function Label({ n, children }: { n: string; children: React.ReactNode }) {
   return (
@@ -88,7 +88,6 @@ export function ProjectCard({
 }
 export default function Portfolio({
   content: c,
-  contactReady = false,
   preview = false,
 }: {
   content: SiteContent;
@@ -99,6 +98,18 @@ export default function Portfolio({
   const projects = [...c.projects].sort(
     (a, b) => Number(b.featured) - Number(a.featured),
   );
+  const footerLinks = ([
+    ["#main-content", "Home", true],
+    ["#about", "About", c.sections.about],
+    ["#work", "Work", c.sections.work],
+    ["#expertise", "Expertise", c.sections.expertise],
+  ] as [string, string, boolean][]).filter(([, , visible]) => visible);
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const body = `${form.get("message")}\n\nFrom: ${form.get("name")} (${form.get("email")})\nCompany: ${form.get("company") || "-"}`;
+    window.location.href = `mailto:${c.contact.email}?subject=${encodeURIComponent(String(form.get("subject")))}&body=${encodeURIComponent(body)}`;
+  };
   return (
     <MotionScene>
       <main id="top">
@@ -128,7 +139,7 @@ export default function Portfolio({
                 <span className="little-star" aria-hidden="true">
                   ✳
                 </span>{" "}
-                PRODUCT THINKING. HUMAN IMPACT.
+                {c.hero.eyebrow || "PRODUCT THINKING. HUMAN IMPACT."}
               </p>
               <p className="hero-meet hero-enter">Hello, I’m</p>
               <h1 className="hero-name hero-enter">
@@ -144,7 +155,7 @@ export default function Portfolio({
                   href={c.sections.work ? "#work" : "#contact"}
                   className="button button-primary"
                 >
-                  {c.hero.ctaLabel}
+                  {c.hero.ctaLabel || "View my work"}
                   <Arrow />
                 </a>
                 <a className="quiet-link" href="#contact">
@@ -366,93 +377,90 @@ export default function Portfolio({
             </div>
           </section>
         )}
-        {c.sections.testimonial && c.testimonial.quote && (
-          <section className="testimonial-section section-space">
-            <figure className="page-width testimonial-inner" data-reveal>
+        {c.sections.testimonial && c.testimonials.length > 0 && (
+          <section className="testimonial-section section-space classic-testimonials">
+            <div className="page-width testimonial-list" data-count={c.testimonials.length} data-carousel={c.testimonials.length > 2 ? "true" : "false"} tabIndex={c.testimonials.length > 2 ? 0 : undefined} role={c.testimonials.length > 2 ? "region" : undefined} aria-label={c.testimonials.length > 2 ? "Client testimonials. Scroll horizontally to see more." : undefined}>
+            {c.testimonials.map((testimonial, index) => <figure className="testimonial-inner" data-reveal key={index}>
               <p className="eyebrow">IN GOOD COMPANY</p>
               <span className="quote-mark" aria-hidden="true">
                 “
               </span>
-              <blockquote>{c.testimonial.quote}</blockquote>
+              <blockquote>{testimonial.quote}</blockquote>
               <figcaption>
                 <span className="quote-avatar" aria-hidden="true">
-                  {c.testimonial.name
+                  {testimonial.name
                     .split(" ")
                     .map((n) => n[0])
                     .join("")}
                 </span>
                 <div>
-                  <strong>{c.testimonial.name}</strong>
-                  <p>{c.testimonial.role}</p>
+                  <strong>{testimonial.name}</strong>
+                  <p>{testimonial.role}</p>
                 </div>
               </figcaption>
-            </figure>
+            </figure>)}
+            </div>
           </section>
         )}
-        <section id="contact" className="contact-section">
-          <div className="contact-orbit" aria-hidden="true" />
-          <div className="page-width">
-            <div className="contact-top" data-reveal>
-              <Label n="/">WHAT’S NEXT?</Label>
+        <section id="contact" className="contact-section classic-contact">
+          <div className="page-width classic-contact-grid">
+            <div className="classic-contact-intro" data-reveal>
+              <Label n="/">LET&apos;S WORK TOGETHER</Label>
               <h2>{c.contact.heading}</h2>
               <p>{c.contact.subheading}</p>
-              <a
-                className="button button-light"
-                href={`mailto:${c.contact.email}`}
-              >
-                Let’s make it happen <Arrow />
+              <a className="button button-light" href={`mailto:${c.contact.email}`}>
+                Get in touch <Arrow />
               </a>
+              {c.contact.location && <p className="classic-contact-location">{c.contact.location}</p>}
             </div>
-            <div className="contact-details">
-              <a href={`mailto:${c.contact.email}`}>{c.contact.email}</a>
-              <div>
-                {c.contact.github && (
-                  <a href={c.contact.github} target="_blank" rel="noreferrer">
-                    GitHub ↗
-                  </a>
-                )}
-                {c.contact.linkedin && (
-                  <a href={c.contact.linkedin} target="_blank" rel="noreferrer">
-                    LinkedIn ↗
-                  </a>
-                )}
-                {c.contact.instagram && (
-                  <a href={c.contact.instagram} target="_blank" rel="noreferrer">
-                    Instagram ↗
-                  </a>
-                )}
-                {c.contact.facebook && (
-                  <a href={c.contact.facebook} target="_blank" rel="noreferrer">
-                    Facebook ↗
-                  </a>
-                )}
-                {c.contact.twitter && (
-                  <a href={c.contact.twitter} target="_blank" rel="noreferrer">
-                    Twitter ↗
-                  </a>
-                )}
-                {c.contact.cv && (
-                  <a href={c.contact.cv} target="_blank" rel="noreferrer">
-                    Download CV ↓
-                  </a>
-                )}
+            <form className="classic-mailto-form" onSubmit={handleSubmit} data-reveal>
+              <div className="classic-form-row">
+                <input name="name" type="text" placeholder="Name" required autoComplete="name" />
+                <input name="email" type="email" placeholder="Email" required autoComplete="email" />
               </div>
-            </div>
-            {c.contact.formEnabled && contactReady && !preview && (
-              <ContactForm />
-            )}
-            <footer className="site-footer">
-              <a href="#top" className="footer-brand">
-                {name[0]}
-                <em>.</em>
-              </a>
-              <span>
-                © {new Date().getFullYear()} {c.hero.name}
-              </span>
-              <a href="#top">Back to top ↑</a>
-            </footer>
+              <input name="company" type="text" placeholder="Company / Organization" autoComplete="organization" />
+              <input name="subject" type="text" placeholder="Subject / Service" required />
+              <textarea name="message" placeholder="Message" rows={5} required />
+              <button type="submit" className="button button-light">Send Message <Arrow /></button>
+            </form>
           </div>
         </section>
+        <footer className="classic-site-footer">
+          <div className="page-width">
+            <div className="classic-footer-grid">
+              <div className="classic-footer-lead">
+                <Label n="/">HAVE A PROJECT IN MIND?</Label>
+                <h3>Let&apos;s make something meaningful.</h3>
+                <a href={`mailto:${c.contact.email}`} className="button button-light">Get in touch <Arrow /></a>
+              </div>
+              <div className="classic-footer-column">
+                <Label n="/">NAVIGATION</Label>
+                {footerLinks.map(([href, label]) => <a key={href} href={href}>{label}</a>)}
+              </div>
+              {c.expertise.length > 0 && (
+                <div className="classic-footer-column">
+                  <Label n="/">EXPERTISE</Label>
+                  {c.expertise.slice(0, 5).map((item, index) => <span key={`${item.title}-${index}`}>{item.title}</span>)}
+                </div>
+              )}
+              <div className="classic-footer-column">
+                <Label n="/">CONTACT</Label>
+                <a href={`mailto:${c.contact.email}`}>{c.contact.email}</a>
+                {c.contact.location && <span>{c.contact.location}</span>}
+                {c.contact.cv && <a href={c.contact.cv} target="_blank" rel="noreferrer">Download CV &darr;</a>}
+                <div className="classic-footer-socials">
+                  {[["GitHub", c.contact.github], ["LinkedIn", c.contact.linkedin], ["Instagram", c.contact.instagram], ["Facebook", c.contact.facebook], ["Twitter", c.contact.twitter]].filter(([, url]) => url).map(([label, url]) => (
+                    <a key={label} href={url as string} target="_blank" rel="noreferrer">{label}</a>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="classic-footer-bottom">
+              <span>&copy; {new Date().getFullYear()} {c.hero.name}. All rights reserved.</span>
+              <a href="#top">Back to top &uarr;</a>
+            </div>
+          </div>
+        </footer>
       </main>
     </MotionScene>
   );

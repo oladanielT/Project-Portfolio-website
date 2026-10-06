@@ -1,12 +1,12 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import Image from "./Media";
 import Link from "next/link";
-import type { SiteContent } from "@/lib/schema";
-import ContactForm from "@/components/ContactForm";
+import { defaultFaqs, type SiteContent } from "@/lib/schema";
 import MotionScene from "./MotionScene";
-import { Arrow, OrbitMark, VisionaryFooter, VisionaryHeader } from "./Chrome";
+import TemplateFooter from "../common/TemplateFooter";
+import { Arrow, OrbitMark, VisionaryHeader } from "./Chrome";
 import "./styles.css";
 
 function Label({
@@ -21,6 +21,97 @@ function Label({
       <span>{number} /</span>
       {children}
     </p>
+  );
+}
+
+function TestimonialsSlider({
+  testimonials,
+}: {
+  testimonials: SiteContent["testimonials"];
+}) {
+  const [active, setActive] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+
+  const next = useCallback(() => {
+    setActive((prev) => (prev + 1) % testimonials.length);
+  }, [testimonials.length]);
+
+  const prev = useCallback(() => {
+    setActive((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+  }, [testimonials.length]);
+
+  useEffect(() => {
+    if (testimonials.length <= 1 || isPaused) return;
+    const interval = setInterval(next, 5000);
+    return () => clearInterval(interval);
+  }, [testimonials.length, isPaused, next]);
+
+  if (!testimonials.length) return null;
+
+  return (
+    <div
+      className="v-testimonial-slider"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="Client Testimonials"
+    >
+      <div className="v-testimonial-stage">
+        {testimonials.map((testimonial, index) => {
+          const isActive = index === active;
+          return (
+            <blockquote
+              key={index}
+              className={`v-testimonial-slide ${isActive ? "is-active" : ""}`}
+              aria-hidden={!isActive}
+            >
+              <p>{testimonial.quote}</p>
+              <footer>
+                <span className="v-dot" />
+                <div>
+                  <cite>{testimonial.name}</cite>
+                  <span>{testimonial.role}</span>
+                </div>
+              </footer>
+            </blockquote>
+          );
+        })}
+      </div>
+
+      {testimonials.length > 1 && (
+        <div className="v-testimonial-controls">
+          <button
+            type="button"
+            className="v-testimonial-arrow"
+            onClick={prev}
+            aria-label="Previous testimonial"
+          >
+            ←
+          </button>
+          <div className="v-testimonial-dots">
+            {testimonials.map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                className={`v-testimonial-dot ${i === active ? "is-active" : ""}`}
+                onClick={() => setActive(i)}
+                aria-label={`Go to testimonial ${i + 1}`}
+                aria-current={i === active ? "true" : undefined}
+              />
+            ))}
+          </div>
+          <button
+            type="button"
+            className="v-testimonial-arrow"
+            onClick={next}
+            aria-label="Next testimonial"
+          >
+            →
+          </button>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -48,13 +139,15 @@ export default function Portfolio({
       c.about.photo ||
       c.about.stat.value,
     );
+  const faqs = c.faqs && c.faqs.length > 0 ? c.faqs : defaultFaqs;
+
   return (
     <div
       ref={root}
-      className="visionary-wrapper v-site"
+      className={`visionary-wrapper v-site theme-${c.colorMode || "dark"}`}
       id="top"
       data-template="visionary"
-      data-theme={c.colorMode}
+      data-theme={c.colorMode || "dark"}
     >
       <MotionScene root={root} />
       <VisionaryHeader content={c} />
@@ -65,101 +158,87 @@ export default function Portfolio({
         </aside>
       )}
       <main id="main-content">
+        {/* 1. HERO */}
         <section className="v-hero v-container" aria-labelledby="v-hero-title">
-          <div className="v-hero-copy">
-            {c.hero.eyebrow && (
-              <p className="v-kicker v-hero-eyebrow">
-                <span className="v-dot" />
-                {c.hero.eyebrow}
-              </p>
-            )}
-            <h1 id="v-hero-title">{c.hero.name}</h1>
-            {c.hero.title && <p className="v-hero-title">{c.hero.title}</p>}
-            <p className="v-hero-intro">{c.hero.intro}</p>
-            <div className="v-actions">
-              <a
-                className="v-button"
-                href={projects.length ? "#work" : "#contact"}
-              >
-                {projects.length
-                  ? c.hero.ctaLabel || "View my work"
-                  : "Let’s talk"}
-                <Arrow />
-              </a>
-              {projects.length > 0 && (
-                <a className="v-text-link" href="#contact">
-                  Let’s talk <Arrow />
-                </a>
+          <div className="v-hero-card">
+            <div className="v-hero-copy">
+              {c.hero.eyebrow && (
+                <p className="v-kicker v-hero-eyebrow">
+                  <span className="v-dot" />
+                  {c.hero.eyebrow}
+                </p>
               )}
-            </div>
-          </div>
-          <div
-            className={`v-hero-art ${c.hero.photo ? "" : "v-art-no-photo"}`}
-            aria-hidden="true"
-          >
-            <svg className="v-orbit-guide" viewBox="0 0 600 650" fill="none">
-              <ellipse
-                cx="300"
-                cy="320"
-                rx="270"
-                ry="225"
-                transform="rotate(-35 300 320)"
-              />
-              <ellipse
-                cx="300"
-                cy="320"
-                rx="270"
-                ry="225"
-                transform="rotate(35 300 320)"
-              />
-              <path d="M300 15v620M15 320h570" strokeDasharray="3 9" />
-            </svg>
-            <div className="v-sculpture">
-              <div className="v-sculpture-spin">
-                <div className="v-ring v-ring-one" />
-                <div className="v-ring v-ring-two" />
-                <div className="v-ring v-ring-three" />
-                <div className="v-orb" />
+              <h1 id="v-hero-title">{c.hero.name}</h1>
+              {c.hero.title && <p className="v-hero-title">{c.hero.title}</p>}
+              <p className="v-hero-intro">{c.hero.intro}</p>
+              <div className="v-actions">
+                <a
+                  className="v-button"
+                  href={projects.length ? "#work" : "#contact"}
+                >
+                  {projects.length
+                    ? c.hero.ctaLabel || "View my work"
+                    : "Let’s talk"}
+                  <Arrow />
+                </a>
+                {projects.length > 0 && (
+                  <a className="v-button v-button-outline" href="#contact">
+                    Get in touch <Arrow />
+                  </a>
+                )}
               </div>
+              <a
+                href={
+                  showAbout ? "#about" : projects.length ? "#work" : "#contact"
+                }
+                className="v-kicker v-scroll-hint"
+              >
+                Scroll down <span aria-hidden="true">↓</span>
+              </a>
             </div>
-            {c.hero.photo && (
-              <div className="v-hero-portrait">
+
+            <div className="v-hero-visual">
+              {c.hero.photo ? (
                 <Image
                   src={c.hero.photo}
-                  alt=""
+                  alt={c.hero.name}
                   fill
                   priority
                   unoptimized
-                  sizes="(max-width: 760px) 70vw, 28vw"
+                  sizes="(max-width: 760px) 100vw, 50vw"
                   style={{ objectPosition: c.hero.photoPosition }}
                 />
-                <span className="v-portrait-line" />
-              </div>
-            )}
-            <span className="v-art-plus v-art-plus-one">+</span>
-            <span className="v-art-plus v-art-plus-two">+</span>
-            <span className="v-art-caption v-kicker">
-              A different perspective.
-            </span>
-            <span className="v-art-coordinate v-kicker">VISION / 01</span>
-          </div>
-          <div className="v-hero-bottom">
-            <span className="v-kicker">{c.contact.location}</span>
-            <a
-              href={
-                projects.length ? "#work" : showAbout ? "#about" : "#contact"
-              }
-              className="v-kicker"
-            >
-              Scroll to explore <span aria-hidden="true">↓</span>
-            </a>
+              ) : (
+                <div className="v-hero-art v-art-no-photo" aria-hidden="true">
+                  <div className="v-sculpture">
+                    <div className="v-sculpture-spin">
+                      <div className="v-ring v-ring-one" />
+                      <div className="v-ring v-ring-two" />
+                      <div className="v-ring v-ring-three" />
+                      <div className="v-orb" />
+                    </div>
+                  </div>
+                </div>
+              )}
+              <aside className="v-hero-badge">
+                <p className="v-kicker">
+                  <span className="v-pulse" aria-hidden="true" />
+                  Available for freelance
+                </p>
+                <p>Let’s work together on your next project.</p>
+                <a href="#contact" className="v-kicker">
+                  Schedule a call <Arrow />
+                </a>
+              </aside>
+            </div>
           </div>
         </section>
 
+        {/* 2. ORGANIZATIONS / TRUSTED BY */}
         {c.sections.organizations && c.organizations.length > 0 && (
           <section className="v-organizations" aria-label="Organizations">
             <div className="v-container v-organizations-inner">
-              <p className="v-kicker">Along the journey</p>
+              <p className="v-kicker">Along the journey · Trusted by</p>
               <div>
                 {c.organizations.map((org, i) => (
                   <div className="v-organization" key={`${org.name}-${i}`}>
@@ -183,103 +262,7 @@ export default function Portfolio({
           </section>
         )}
 
-        {projects.length > 0 && (
-          <section
-            id="work"
-            className="v-section v-container"
-            aria-labelledby="v-work-title"
-          >
-            <Label number="01">Selected work</Label>
-            <div className="v-section-heading" data-v-reveal>
-              <h2 id="v-work-title">
-                Ideas out
-                <br />
-                in the <em>world.</em>
-              </h2>
-              <p>
-                A closer look at the work.
-                <br />
-                The thinking, the process, the outcome.
-              </p>
-            </div>
-            <div className="v-project-grid">
-              {projects.map((p, i) => (
-                <article
-                  className={`v-project ${p.featured ? "v-project-featured" : ""}`}
-                  key={p.slug}
-                  data-v-reveal
-                >
-                  <Link
-                    href={`${preview ? "/admin/preview" : ""}/work/${p.slug}`}
-                    className="v-project-link"
-                    aria-label={`Explore the project: ${p.title}`}
-                  >
-                    <div className="v-project-image">
-                      {p.cover ? (
-                        <Image
-                          src={p.cover}
-                          alt={`${p.title} project preview`}
-                          fill
-                          unoptimized
-                          sizes="(max-width: 760px) 90vw, 42vw"
-                        />
-                      ) : (
-                        <div className="v-project-placeholder">
-                          <OrbitMark variant={i} />
-                          <span>{p.title}</span>
-                        </div>
-                      )}
-                      <span className="v-project-index v-kicker">
-                        {String(i + 1).padStart(2, "0")} /{" "}
-                        {p.featured ? "Featured project" : "Project"}
-                      </span>
-                      <span className="v-project-arrow">
-                        <Arrow />
-                      </span>
-                    </div>
-                  </Link>
-                  <div className="v-project-content">
-                    <div className="v-project-info">
-                      <div>
-                        <p className="v-kicker">{p.category}</p>
-                        <h3>
-                          <Link
-                            href={`${preview ? "/admin/preview" : ""}/work/${p.slug}`}
-                          >
-                            {p.title}
-                          </Link>
-                        </h3>
-                      </div>
-                      <p className="v-project-role">{p.role || p.org}</p>
-                    </div>
-                    <p className="v-project-description">{p.description}</p>
-                    {p.stats.length > 0 && (
-                      <ul className="v-project-results">
-                        {(p.featured ? p.stats : p.stats.slice(0, 1)).map(
-                          (stat, index) => (
-                            <li key={index}>
-                              <span aria-hidden="true">↗</span>
-                              {stat}
-                            </li>
-                          ),
-                        )}
-                      </ul>
-                    )}
-                    {p.featured && (
-                      <Link
-                        className="v-text-link v-project-cta"
-                        href={`${preview ? "/admin/preview" : ""}/work/${p.slug}`}
-                      >
-                        Explore the project <Arrow />
-                      </Link>
-                    )}
-                  </div>
-                </article>
-              ))}
-            </div>
-          </section>
-        )}
-
+        {/* 3. ABOUT */}
         {showAbout && (
           <section
             id="about"
@@ -353,7 +336,7 @@ export default function Portfolio({
                     target="_blank"
                     rel="noreferrer"
                   >
-                    View my CV <Arrow />
+                    View curriculum vitae <Arrow />
                   </a>
                 )}
               </div>
@@ -361,60 +344,195 @@ export default function Portfolio({
           </section>
         )}
 
-        {c.sections.expertise &&
-          (expertise.length > 0 || c.skills.length > 0) && (
-            <section
-              id="expertise"
-              className="v-section v-container"
-              aria-labelledby="v-expertise-title"
-            >
-              <Label number="03">Expertise</Label>
-              <div className="v-section-heading" data-v-reveal>
-                <h2 id="v-expertise-title">
-                  Where vision
-                  <br />
-                  meets <em>practice.</em>
-                </h2>
-                <p>The capabilities behind the work.</p>
-              </div>
-              <div className="v-expertise-list">
-                {expertise.map((item, i) => (
+        {/* 4. WORK / SELECTED PROJECTS */}
+        {projects.length > 0 && (
+          <section
+            id="work"
+            className="v-section v-container"
+            aria-labelledby="v-work-title"
+          >
+            <Label number="03">Selected work</Label>
+            <div className="v-section-heading" data-v-reveal>
+              <h2 id="v-work-title">
+                Ideas out
+                <br />
+                in the <em>world.</em>
+              </h2>
+              <p>
+                A closer look at the work.
+                <br />
+                The thinking, the process, the outcome.
+              </p>
+            </div>
+            <div className="v-project-grid">
+              {projects.map((project, i) => {
+                const isFeatured = i === 0;
+                return (
                   <article
-                    className="v-expertise-row"
-                    key={`${item.title}-${i}`}
+                    className={`v-project ${isFeatured ? "v-project-featured" : ""}`}
+                    key={project.slug}
                     data-v-reveal
                   >
-                    <span className="v-kicker">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <OrbitMark variant={i} />
-                    <h3>{item.title}</h3>
-                    <div>
-                      <p>{item.description}</p>
-                      {item.skills.length > 0 && (
-                        <ul className="v-tags">
-                          {item.skills.map((skill, j) => (
-                            <li key={j}>{skill}</li>
+                    <Link
+                      href={`${preview ? "/admin/preview" : ""}/work/${project.slug}`}
+                      className="v-project-link"
+                      aria-label={`Explore the project: ${project.title}`}
+                    >
+                      <div className="v-project-image">
+                        {project.cover ? (
+                          <Image
+                            src={project.cover}
+                            alt={`${project.title} project preview`}
+                            fill
+                            unoptimized
+                            sizes={
+                              isFeatured
+                                ? "(max-width: 900px) 100vw, 55vw"
+                                : "(max-width: 760px) 90vw, 42vw"
+                            }
+                          />
+                        ) : (
+                          <div className="v-project-placeholder">
+                            <OrbitMark variant={i} />
+                            <span>{project.title}</span>
+                          </div>
+                        )}
+                        <span className="v-project-index v-kicker">
+                          {String(i + 1).padStart(2, "0")} /{" "}
+                          {isFeatured ? "Featured project" : "Project"}
+                        </span>
+                        <span className="v-project-arrow">
+                          <Arrow />
+                        </span>
+                      </div>
+                    </Link>
+                    <div className="v-project-content">
+                      <div className="v-project-info">
+                        <div>
+                          <p className="v-kicker">{project.category}</p>
+                          <h3>
+                            <Link
+                              href={`${preview ? "/admin/preview" : ""}/work/${project.slug}`}
+                            >
+                              {project.title}
+                            </Link>
+                          </h3>
+                        </div>
+                        {(project.role || project.org) && (
+                          <p className="v-project-role">
+                            {project.org ? `${project.org} · ` : ""}
+                            {project.role}
+                          </p>
+                        )}
+                      </div>
+                      <p className="v-project-description">
+                        {project.description}
+                      </p>
+                      {project.stats && project.stats.length > 0 && (
+                        <ul className="v-project-results">
+                          {(isFeatured
+                            ? project.stats.slice(0, 3)
+                            : project.stats.slice(0, 2)
+                          ).map((stat, index) => (
+                            <li key={index}>
+                              <span aria-hidden="true">↗</span>
+                              <span>{stat}</span>
+                            </li>
                           ))}
                         </ul>
                       )}
+                      <div className="v-project-cta">
+                        <Link
+                          className="v-button"
+                          href={`${preview ? "/admin/preview" : ""}/work/${project.slug}`}
+                        >
+                          Read case study <Arrow />
+                        </Link>
+                        {project.caseStudyUrl && (
+                          <a
+                            className="v-text-link"
+                            href={project.caseStudyUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            Live preview ↗
+                          </a>
+                        )}
+                      </div>
                     </div>
                   </article>
-                ))}
-              </div>
-              {c.skills.length > 0 && (
-                <div className="v-additional-skills">
-                  <p className="v-kicker">Skills in practice</p>
-                  <ul className="v-tags">
-                    {c.skills.map((skill, i) => (
-                      <li key={i}>{skill}</li>
-                    ))}
-                  </ul>
+                );
+              })}
+            </div>
+          </section>
+        )}
+
+        {/* 5. SERVICES / EXPERTISE */}
+        {c.sections.expertise &&
+          (expertise.length > 0 || (c.skills && c.skills.length > 0)) && (
+            <section
+              id="services"
+              className="v-services v-section"
+              aria-labelledby="v-services-title"
+            >
+              <div
+                id="expertise"
+                style={{ position: "relative", top: "-120px" }}
+              />
+              <div className="v-container">
+                <Label number="04">Focus areas</Label>
+                <div className="v-section-heading" data-v-reveal>
+                  <h2 id="v-services-title">
+                    Where vision
+                    <br />
+                    meets <em>practice.</em>
+                  </h2>
+                  <p>
+                    Specialized skill sets and capabilities behind the work.
+                  </p>
                 </div>
-              )}
+                <div className="v-expertise-list">
+                  {expertise.map((item, i) => (
+                    <article
+                      className="v-expertise-row"
+                      key={`${item.title}-${i}`}
+                      data-v-reveal
+                    >
+                      <span className="v-kicker">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <OrbitMark variant={i} />
+                      <h3>{item.title}</h3>
+                      <div>
+                        <p>{item.description}</p>
+                        {"skills" in item &&
+                          item.skills &&
+                          item.skills.length > 0 && (
+                            <ul className="v-tags">
+                              {item.skills.map((skill, j) => (
+                                <li key={j}>{skill}</li>
+                              ))}
+                            </ul>
+                          )}
+                      </div>
+                    </article>
+                  ))}
+                </div>
+                {c.skills && c.skills.length > 0 && (
+                  <div className="v-additional-skills" data-v-reveal>
+                    <p className="v-kicker">Skills in practice</p>
+                    <ul className="v-tags">
+                      {c.skills.map((skill, i) => (
+                        <li key={i}>{skill}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
             </section>
           )}
 
+        {/* 6. PROCESS */}
         {c.sections.process && c.process.length > 0 && (
           <section
             id="process"
@@ -422,7 +540,7 @@ export default function Portfolio({
             aria-labelledby="v-process-title"
           >
             <div className="v-container">
-              <Label number="04">The process</Label>
+              <Label number="05">The process</Label>
               <div className="v-section-heading" data-v-reveal>
                 <h2 id="v-process-title">
                   A path from
@@ -458,13 +576,14 @@ export default function Portfolio({
           </section>
         )}
 
+        {/* 7. TOOLS */}
         {c.sections.tools && c.tools.length > 0 && (
           <section
             id="tools"
             className="v-section v-container v-tools"
             aria-labelledby="v-tools-title"
           >
-            <Label number="05">The toolkit</Label>
+            <Label number="06">The toolkit</Label>
             <div className="v-section-heading" data-v-reveal>
               <h2 id="v-tools-title">
                 In my <em>orbit.</em>
@@ -499,7 +618,8 @@ export default function Portfolio({
           </section>
         )}
 
-        {c.sections.testimonial && c.testimonial.quote && (
+        {/* 8. TESTIMONIALS */}
+        {c.sections.testimonial && c.testimonials.length > 0 && (
           <section className="v-testimonial v-section" aria-label="Testimonial">
             <div className="v-container" data-v-reveal>
               <svg
@@ -510,64 +630,44 @@ export default function Portfolio({
               >
                 <path d="M42 5C18 8 5 27 5 58h33V30H23c3-10 9-15 19-18V5Zm51 0C69 8 56 27 56 58h33V30H74c3-10 9-15 19-18V5Z" />
               </svg>
-              <blockquote>
-                <p>{c.testimonial.quote}</p>
-                <footer>
-                  <span className="v-dot" />
-                  <div>
-                    <cite>{c.testimonial.name}</cite>
-                    <span>{c.testimonial.role}</span>
-                  </div>
-                </footer>
-              </blockquote>
+              <TestimonialsSlider testimonials={c.testimonials} />
             </div>
           </section>
         )}
 
-        <section
-          id="contact"
-          className="v-contact v-section"
-          aria-labelledby="v-contact-title"
-        >
-          <div className="v-container">
-            <Label number="06">The next chapter</Label>
-            <div className="v-contact-heading" data-v-reveal>
-              <h2 id="v-contact-title">{c.contact.heading}</h2>
-              <a
-                className="v-contact-orbit"
-                href={`mailto:${c.contact.email}`}
-                aria-label="Get in touch by email"
-              >
-                <OrbitMark />
-                <Arrow />
-              </a>
+        {/* 9. FAQS */}
+        {c.sections.faqs && faqs.length > 0 && (
+          <section
+            id="faqs"
+            className="v-section v-container v-faqs"
+            aria-labelledby="v-faqs-title"
+          >
+            <Label number="07">Inquiries &amp; Clarity</Label>
+            <div className="v-section-heading" data-v-reveal>
+              <h2 id="v-faqs-title">
+                Common <em>questions.</em>
+              </h2>
+              <p>Everything you might want to know before reaching out.</p>
             </div>
-            <div className="v-contact-grid">
-              <div>
-                <p className="v-body">{c.contact.subheading}</p>
-                <a className="v-email" href={`mailto:${c.contact.email}`}>
-                  {c.contact.email} <Arrow />
-                </a>
-                {c.contact.location && (
-                  <p className="v-kicker v-contact-location">
-                    Based in {c.contact.location}
-                  </p>
-                )}
-              </div>
-              {c.contact.formEnabled && contactReady && !preview && (
-                <ContactForm />
-              )}
-              {c.contact.formEnabled && preview && (
-                <p className="v-form-note">
-                  Your contact form appears here when messaging is connected on
-                  the published site. Visitors can always reach you by email.
-                </p>
-              )}
+            <div className="v-faqs-list" data-v-reveal>
+              {faqs.map((faq, i) => (
+                <details key={i} className="v-faq-item" open={i === 0}>
+                  <summary className="v-faq-question">
+                    <span>{faq.question}</span>
+                    <span className="v-faq-icon">+</span>
+                  </summary>
+                  <div className="v-faq-answer">
+                    <p>{faq.answer}</p>
+                  </div>
+                </details>
+              ))}
             </div>
-          </div>
-        </section>
+          </section>
+        )}
       </main>
-      <VisionaryFooter content={c} />
+
+      {/* 11. FOOTER */}
+      <TemplateFooter content={c} templateVariant="visionary" />
     </div>
   );
 }

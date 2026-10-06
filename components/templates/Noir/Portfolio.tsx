@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import type { SiteContent } from "@/lib/schema";
+import { defaultFaqs, type SiteContent } from "@/lib/schema";
 import MotionScene from "./MotionScene";
 import "./styles.css";
 
@@ -13,6 +13,64 @@ import "./styles.css";
  * if your schema doesn't have them yet.
  */
 type Loose = Record<string, any>;
+
+const noirToolFallbacks = [
+  { name: "Jira", slug: "jira", color: "#2684ff" },
+  { name: "Trello", slug: "trello", color: "#0c66e4" },
+  { name: "Figma", slug: "figma", color: "#f24e1e" },
+  { name: "Google Workspace", slug: "googleworkspace", color: "#4285f4" },
+  { name: "Slack", slug: "slack", color: "#611f69" },
+  { name: "Notion", slug: "notion", color: "#111111" },
+  { name: "Google Analytics", slug: "googleanalytics", color: "#e37400" },
+  { name: "GitHub", slug: "github", color: "#181717" },
+  { name: "ChatGPT", slug: "openai", color: "#10a37f" },
+];
+
+const toolIconPaths: Record<string, string> = {
+  jira: "M11.53 2c0 3.08 2.5 5.58 5.58 5.58-3.08 0-5.58 2.5-5.58 5.58 0-3.08-2.5-5.58-5.58-5.58 3.08 0 5.58-2.5 5.58-5.58Zm5.8 9.52c0 2.13 1.73 3.86 3.86 3.86-2.13 0-3.86 1.73-3.86 3.86 0-2.13-1.73-3.86-3.86-3.86 2.13 0 3.86-1.73 3.86-3.86ZM5.1 13.2c0 1.52 1.23 2.75 2.75 2.75-1.52 0-2.75 1.23-2.75 2.75 0-1.52-1.23-2.75-2.75-2.75 1.52 0 2.75-1.23 2.75-2.75Z",
+  trello: "M4.5 2h15A2.5 2.5 0 0 1 22 4.5v15a2.5 2.5 0 0 1-2.5 2.5h-15A2.5 2.5 0 0 1 2 19.5v-15A2.5 2.5 0 0 1 4.5 2Zm1.2 3A.7.7 0 0 0 5 5.7v6.6c0 .39.31.7.7.7h4.1c.39 0 .7-.31.7-.7V5.7a.7.7 0 0 0-.7-.7H5.7Zm8.5 0a.7.7 0 0 0-.7.7v10.6c0 .39.31.7.7.7h4.1c.39 0 .7-.31.7-.7V5.7a.7.7 0 0 0-.7-.7h-4.1Z",
+  figma: "M12 12a4 4 0 1 1 4 4h-4v-4Zm-8 4a4 4 0 0 1 4-4h4v8H8a4 4 0 0 1-4-4Zm8-12h4a4 4 0 1 1 0 8h-4V4Zm-8 4a4 4 0 0 1 4-4h4v8H8a4 4 0 0 1-4-4Zm0 8a4 4 0 0 1 4-4h4v8H8a4 4 0 0 1-4-4Zm12-4a4 4 0 1 1 0 8h-4v-8h4Z",
+  googleworkspace: "M12 2a10 10 0 1 0 10 10V9h-9v4h4a5 5 0 1 1-1.46-5.54l2.83-2.83A9.96 9.96 0 0 0 12 2Z",
+  slack: "M5.1 15.2a1.6 1.6 0 1 1-1.6 1.6v-1.6h1.6Zm1.6 0h4.8v1.6a2.4 2.4 0 1 1-4.8 0v-1.6ZM8.3 4.4a1.6 1.6 0 1 1 1.6 1.6H8.3V4.4Zm0-1.6h1.6v1.6a2.4 2.4 0 1 1-2.4-2.4h.8v.8Zm7.2 1.6a1.6 1.6 0 1 1 1.6 1.6h-1.6V4.4Zm0-1.6h1.6v1.6a2.4 2.4 0 1 1-2.4-2.4h.8v.8Zm1.6 7.2a1.6 1.6 0 1 1-1.6 1.6V10h1.6Zm1.6 0v1.6a2.4 2.4 0 1 1-2.4-2.4h.8v.8h1.6ZM4.4 8.4a1.6 1.6 0 1 1 1.6 1.6H4.4V8.4Zm0-1.6H6v1.6a2.4 2.4 0 1 1-2.4-2.4h.8v.8ZM15.2 18.4a1.6 1.6 0 1 1-1.6-1.6h1.6v1.6Zm1.6 0v-1.6a2.4 2.4 0 1 1 2.4 2.4h-.8v-.8h-1.6Z",
+  notion: "M4.46 3.17c.83-.68 1.88-.77 3.03-.85l10.98-.66c1.08-.08 1.63.73 1.63 1.71v13.39c0 1.22-.44 1.96-1.4 2.02l-12.18.73c-1.2.07-1.8-.63-1.8-1.65V4.9c0-.7.25-1.3.74-1.73Zm2.28 2.25v11.23l2.18-.13V8.8l5.2 7.52 2.4-.14V5.16l-2.2.13v7.55l-5.2-7.55-2.38.13Z",
+  googleanalytics: "M3 17.5a2.5 2.5 0 1 1 5 0v2a2.5 2.5 0 1 1-5 0v-2Zm6.5-7a2.5 2.5 0 1 1 5 0v9a2.5 2.5 0 1 1-5 0v-9ZM16 4.5a2.5 2.5 0 1 1 5 0v15a2.5 2.5 0 1 1-5 0v-15Z",
+  github: "M12 .8a11.2 11.2 0 0 0-3.54 21.83c.56.1.77-.24.77-.54v-2.1c-3.13.68-3.79-1.33-3.79-1.33-.51-1.3-1.25-1.65-1.25-1.65-1.02-.7.08-.69.08-.69 1.13.08 1.72 1.16 1.72 1.16 1 1.72 2.62 1.22 3.26.93.1-.72.39-1.22.71-1.5-2.5-.29-5.13-1.25-5.13-5.55 0-1.23.44-2.23 1.16-3.02-.12-.29-.5-1.43.11-2.98 0 0 .95-.3 3.08 1.15a10.7 10.7 0 0 1 5.6 0c2.13-1.45 3.08-1.15 3.08-1.15.61 1.55.23 2.69.11 2.98.72.79 1.16 1.79 1.16 3.02 0 4.31-2.63 5.25-5.14 5.53.4.35.76 1.03.76 2.08v3.12c0 .3.2.65.78.54A11.2 11.2 0 0 0 12 .8Z",
+  openai: "M22.28 9.82a5.8 5.8 0 0 0-.5-4.76 5.87 5.87 0 0 0-6.32-2.82 5.88 5.88 0 0 0-9.98 2.14 5.8 5.8 0 0 0-3.87 2.82 5.87 5.87 0 0 0 .72 6.9 5.8 5.8 0 0 0 .5 4.76 5.87 5.87 0 0 0 6.32 2.82 5.88 5.88 0 0 0 9.98-2.14 5.8 5.8 0 0 0 3.87-2.82 5.87 5.87 0 0 0-.72-6.9ZM12 3.4a4.3 4.3 0 0 1 2.2.6l-4.1 2.37a1.18 1.18 0 0 0-.59 1.02v5.05l-1.77-1.02V6.5A3.7 3.7 0 0 1 12 3.4Zm-8.35 4.6a3.68 3.68 0 0 1 2.94-1.84v4.75c0 .42.22.81.59 1.02l4.37 2.53-1.77 1.02-4.14-2.4A3.7 3.7 0 0 1 3.65 8Zm.25 8.86a4.26 4.26 0 0 1 .08-2.25l4.12 2.38c.36.21.81.21 1.18 0l4.37-2.53v2.04l-4.14 2.39a3.7 3.7 0 0 1-5.61-2.03Zm8.1 4.73a4.3 4.3 0 0 1-2.2-.6l4.1-2.37c.36-.21.59-.6.59-1.02v-5.05l1.77 1.02v4.92A3.7 3.7 0 0 1 12 21.59Zm8.35-4.6a3.68 3.68 0 0 1-2.94 1.84v-4.75c0-.42-.22-.81-.59-1.02l-4.37-2.53 1.77-1.02 4.14 2.4a3.7 3.7 0 0 1 1.99 5.08Zm-.25-8.86a4.26 4.26 0 0 1-.08 2.25L15.9 8c-.36-.21-.81-.21-1.18 0l-4.37 2.53V8.5l4.14-2.39a3.7 3.7 0 0 1 5.61 2.03Z",
+};
+
+function getNoirTools(content: SiteContent, legacy: Loose): Loose[] {
+  const source = Array.isArray(content.tools) && content.tools.length
+    ? content.tools
+    : Array.isArray(legacy.tools)
+      ? legacy.tools
+      : [];
+  const actualTools = source.filter((item: Loose) =>
+    noirToolFallbacks.some((tool) => tool.name.toLowerCase() === item.name?.trim().toLowerCase()),
+  );
+  return actualTools.length
+    ? actualTools
+    : noirToolFallbacks.map(({ name, ...icon }) => ({ name, ...icon, purpose: "Tool" }));
+}
+
+function ToolMark({ tool }: { tool: Loose }) {
+  const fallback = noirToolFallbacks.find(
+    (item) => item.name.toLowerCase() === tool.name?.trim().toLowerCase(),
+  );
+  const slug = fallback?.slug;
+  const color = fallback?.color || "currentColor";
+
+  return (
+    <span className="nx-tool-ico" style={{ "--tool-mark-color": color } as React.CSSProperties} aria-hidden="true">
+      {slug && toolIconPaths[slug] ? (
+        <svg className="nx-tool-logo" viewBox="0 0 24 24" role="img" focusable="false">
+          <path d={toolIconPaths[slug]} fill="var(--tool-mark-color)" />
+        </svg>
+      ) : (
+        <span className="nx-tool-mark">{tool.name?.slice(0, 1) || "•"}</span>
+      )}
+    </span>
+  );
+}
 
 function Arrow() {
   return (
@@ -66,13 +124,20 @@ const SocialIcon = ({ type, url }: { type: string, url?: string }) => {
     linkedin: "M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z M2 9h4v12H2z M4 6a2 2 0 100-4 2 2 0 000 4z",
     github: "M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22",
   };
-  return (
-    <a href={url || '#'} target="_blank" rel="noopener noreferrer" aria-label={type} style={{ opacity: 0.8, transition: 'opacity 0.2s', color: 'inherit' }} onMouseOver={(e) => e.currentTarget.style.opacity='1'} onMouseOut={(e) => e.currentTarget.style.opacity='0.8'}>
+  const icon = (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d={paths[type as keyof typeof paths]} />
         {type === 'instagram' && <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />}
       </svg>
+  );
+  return url ? (
+    <a href={url} target="_blank" rel="noopener noreferrer" aria-label={type} className="nx-social-icon">
+      {icon}
     </a>
+  ) : (
+    <span role="img" aria-label={`${type} profile not configured`} className="nx-social-icon is-unconfigured">
+      {icon}
+    </span>
   );
 };
 
@@ -89,7 +154,7 @@ export default function Portfolio({
   const about = (c.about ?? {}) as Loose;
 
   const projects = c.sections.work ? c.projects || [] : [];
-  const tools = c.sections.tools ? c.tools || [] : [];
+  const tools = getNoirTools(c, x);
   const paragraphs: string[] = about.paragraphs || [];
 
   let heroImg: string | undefined =
@@ -107,8 +172,13 @@ export default function Portfolio({
   const services: Loose[] = x.sections?.services === false ? [] : x.services || [];
   const education: Loose[] = x.education || [];
   const experience: Loose[] = x.experience || [];
-  const testimonials: Loose[] = x.testimonials || [];
-  const faqs: Loose[] = x.faqs || x.faq || [];
+  const testimonials: Loose[] = c.sections.testimonial ? c.testimonials : [];
+  const savedFaqs: Loose[] = x.faqs || x.faq || [];
+  const faqs: Loose[] = c.sections.faqs === false
+    ? []
+      : savedFaqs.length
+        ? savedFaqs
+        : defaultFaqs;
 
   const marqueeItems = (
     tools.length
@@ -122,71 +192,6 @@ export default function Portfolio({
 
   const [menu, setMenu] = useState(false);
   const [openFaq, setOpenFaq] = useState(0);
-  const track = useRef<HTMLDivElement>(null);
-
-  const slide = (dir: 1 | -1) => {
-    const el = track.current;
-    if (el) el.scrollBy({ left: dir * el.clientWidth * 0.8, behavior: "smooth" });
-  };
-
-  // Auto-swipe testimonials on small screens
-  useEffect(() => {
-    const el = track.current;
-    if (!el || testimonials.length < 2) return;
-
-    const mq = window.matchMedia("(max-width: 860px)");
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
-    let timer: ReturnType<typeof setInterval> | undefined;
-    let resume: ReturnType<typeof setTimeout> | undefined;
-    let paused = false;
-
-    const tick = () => {
-      if (paused) return;
-      const atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 8;
-      if (atEnd) {
-        el.scrollTo({ left: 0, behavior: "smooth" });
-      } else {
-        const card = el.querySelector("figure") as HTMLElement | null;
-        const gap = parseFloat(getComputedStyle(el).columnGap) || 24;
-        el.scrollBy({ left: card ? card.offsetWidth + gap : el.clientWidth * 0.8, behavior: "smooth" });
-      }
-    };
-
-    const stop = () => {
-      if (timer) clearInterval(timer);
-    };
-    const start = () => {
-      stop();
-      if (mq.matches && !reduce.matches) timer = setInterval(tick, 4000);
-    };
-
-    const pause = () => {
-      paused = true;
-      if (resume) clearTimeout(resume);
-    };
-    const unpause = () => {
-      if (resume) clearTimeout(resume);
-      resume = setTimeout(() => {
-        paused = false;
-      }, 6000);
-    };
-
-    el.addEventListener("pointerdown", pause);
-    el.addEventListener("pointerup", unpause);
-    el.addEventListener("pointercancel", unpause);
-    mq.addEventListener("change", start);
-    start();
-
-    return () => {
-      stop();
-      if (resume) clearTimeout(resume);
-      el.removeEventListener("pointerdown", pause);
-      el.removeEventListener("pointerup", unpause);
-      el.removeEventListener("pointercancel", unpause);
-      mq.removeEventListener("change", start);
-    };
-  }, [testimonials.length]);
-
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
@@ -234,17 +239,18 @@ export default function Portfolio({
             {links.map((l) => (
               <a key={l.href} href={l.href} onClick={() => setMenu(false)}>{l.label}</a>
             ))}
+            <a href="#contact" onClick={() => setMenu(false)}>Contact Me</a>
           </div>
         </div>
       </header>
 
       <main id="main-content">
         {/* ───────── Hero ───────── */}
-        <section className="nx-hero">
-          <div className="nx-wrap nx-hero-grid" style={{ width: "min(1536px, 100% - 2.5rem)", maxWidth: "100%", margin: "0 auto" }}>
+        <section className="nx-hero max-w-7xl mx-auto w-full">
+          <div className="nx-wrap nx-hero-grid max-w-7xl mx-auto" style={{ width: "min(90rem, 100% - 2.5rem)", maxWidth: "100%", margin: "0 auto" }}>
             <div className="nx-hero-copy">
               <span className="nx-pill">👋 Hello There!</span>
-              <h1 className="nx-h1" style={{ fontSize: "clamp(1.5rem, 3vw, 2.5rem)", lineHeight: 1.2 }}>
+              <h1 className="nx-h1 " style={{ fontSize: "clamp(1.5rem, 3vw, 2.5rem)", lineHeight: 1.2 }}>
                 I&apos;m <span className="nx-accent">{c.hero.name}</span>,<br />
                 {c.hero.title}
                 {hero.location ? <><br />Based in {hero.location}.</> : null}
@@ -373,9 +379,9 @@ export default function Portfolio({
         {tools.length > 0 && (
           <section id="skills" className="nx-sec">
             <div className="nx-wrap nx-center">
-              <span className="nx-eyebrow nx-reveal">My Favorite Tools</span>
+              <span className="nx-eyebrow nx-reveal">Productivity stack</span>
               <h2 className="nx-h2 nx-reveal">
-                Exploring the <span className="nx-accent">Tools</span><br />Behind My Work
+                Tools <span className="nx-accent">I Use</span>
               </h2>
               <div className="nx-tools">
                 {tools.map((t) => {
@@ -383,19 +389,7 @@ export default function Portfolio({
                   const lvl = tool.level;
                   return (
                     <div key={tool.name} className="nx-tool nx-reveal">
-                      <span className="nx-tool-ico" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'transparent', padding: '0.5rem' }}>
-                        {tool.logo ? (
-                          <img
-                            src={tool.logo}
-                            alt={tool.name}
-                            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-                            className={["Notion", "GitHub"].includes(tool.name) ? "nx-dark-invert" : ""}
-                          />
-                        ) : (
-                          tool.name.slice(0, 2)
-                        )}
-                      </span>
-                      {lvl ? <strong>{lvl}%</strong> : null}
+                      <ToolMark tool={tool} />
                       <span className="nx-tool-name">{tool.name}</span>
                     </div>
                   );
@@ -484,7 +478,7 @@ export default function Portfolio({
                 <span className="nx-eyebrow">Clients Testimonials</span>
                 <h2 className="nx-h2">The Impact of My Work:<br /><span className="nx-accent">Client Testimonials</span></h2>
               </div>
-              <div className="nx-track" ref={track}>
+              <div className="nx-track">
                 {testimonials.map((t, i) => (
                   <figure key={i} className="nx-quote">
                     <div className="nx-stars" aria-label="5 out of 5">{"★★★★★"}</div>
@@ -495,10 +489,6 @@ export default function Portfolio({
                     </figcaption>
                   </figure>
                 ))}
-              </div>
-              <div className="nx-ctrls">
-                <button aria-label="Previous" onClick={() => slide(-1)} className="nx-ctrl nx-ctrl--prev"><Arrow /></button>
-                <button aria-label="Next" onClick={() => slide(1)} className="nx-ctrl nx-ctrl--accent"><Arrow /></button>
               </div>
             </div>
           </section>
@@ -573,11 +563,11 @@ export default function Portfolio({
               <h4>Contact</h4>
               <a href={`mailto:${c.contact.email}`}>{c.contact.email}</a>
               <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem", marginTop: "1rem" }}>
-                {c.contact.github && <a href={c.contact.github} target="_blank" rel="noreferrer">GitHub</a>}
-                {c.contact.linkedin && <a href={c.contact.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>}
-                {c.contact.twitter && <a href={c.contact.twitter} target="_blank" rel="noreferrer">Twitter</a>}
-                {c.contact.instagram && <a href={c.contact.instagram} target="_blank" rel="noreferrer">Instagram</a>}
-                {c.contact.facebook && <a href={c.contact.facebook} target="_blank" rel="noreferrer">Facebook</a>}
+                <SocialIcon type="github" url={c.contact.github} />
+                <SocialIcon type="linkedin" url={c.contact.linkedin} />
+                <SocialIcon type="twitter" url={c.contact.twitter} />
+                <SocialIcon type="instagram" url={c.contact.instagram} />
+                <SocialIcon type="facebook" url={c.contact.facebook} />
               </div>
             </div>
           </div>

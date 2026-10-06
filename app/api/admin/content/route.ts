@@ -2,9 +2,11 @@ import { NextResponse } from "next/server";
 import { revalidateTag, revalidatePath } from "next/cache";
 import { adminSession } from "@/lib/supabase/server";
 import { defaultContent } from "@/lib/content";
-import { siteSchema } from "@/lib/schema";
+import { defaultFaqs, siteSchema } from "@/lib/schema";
 import { sameOrigin, failure } from "@/lib/api";
+
 export const dynamic = "force-dynamic";
+
 export async function GET() {
   const session = await adminSession();
   if (!session)
@@ -32,9 +34,33 @@ export async function GET() {
       "Unable to load content. Check that the database migration has been applied.",
       503,
     );
+  const content = draft.data?.content
+    ? siteSchema.parse(draft.data.content)
+    : defaultContent;
+
+  if (content.faqs.length === 0) content.faqs = defaultFaqs;
+
+  // Self-healing: if draft lost project stories/challenges, restore from defaultContent
+  content.projects = content.projects.map((p) => {
+    const seedProject = defaultContent.projects.find((sp) => sp.slug === p.slug);
+    if (seedProject) {
+      const hasStory = Boolean(p.challenge || p.approach || p.result || (p.blocks && p.blocks.length > 0));
+      if (!hasStory) {
+        return {
+          ...p,
+          challenge: seedProject.challenge,
+          approach: seedProject.approach,
+          result: seedProject.result,
+          blocks: seedProject.blocks,
+        };
+      }
+    }
+    return p;
+  });
+
   return NextResponse.json(
     {
-      content: draft.data?.content || defaultContent,
+      content,
       version: draft.data?.version || 0,
       savedAt: draft.data?.updated_at,
       publishedAt: publication.data?.updated_at,
@@ -43,6 +69,7 @@ export async function GET() {
     { headers: { "Cache-Control": "private, no-store" } },
   );
 }
+
 export async function POST(request: Request) {
   if (!sameOrigin(request)) return failure("Invalid request origin", 403);
   const session = await adminSession();

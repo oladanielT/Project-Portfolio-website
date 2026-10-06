@@ -7,14 +7,19 @@ import { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { SiteContent } from "@/lib/schema";
+import { projectStorySections } from "@/lib/schema";
 import Nav from "./Nav";
 import VisionaryCaseStudy from "./templates/Visionary/CaseStudy";
 import NoirCaseStudy from "./templates/Noir/CaseStudy";
+import AuroraCaseStudy from "./templates/Aurora/CaseStudy";
+import TemplateFooter from "./templates/common/TemplateFooter";
 
 function ThemeInjector({ template, colorMode }: { template: string; colorMode: string }) {
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", colorMode);
     document.documentElement.setAttribute("data-template", template);
+    document.body.setAttribute("data-theme", colorMode);
+    document.body.setAttribute("data-template", template);
   }, [template, colorMode]);
   return null;
 }
@@ -58,6 +63,32 @@ const ArchitectNav = ({ c, base }: { c: SiteContent; base: string }) => {
           <Link href={`${prefix}#contact`} className="btn-primary btn-small">Let's Talk</Link>
         </div>
       </nav>
+  );
+};
+
+const BentoNav = ({ c, base }: { c: SiteContent; base: string }) => {
+  const prefix = base ? base : "/";
+  return (
+    <header className="bento-header" style={{ position: "sticky", top: 0, zIndex: 50 }}>
+      <div className="bento-header-inner">
+        <Link href={`${prefix}#top`} className="bento-brand">
+          <span className="bento-brand-dot">●</span>
+          <strong>{c.hero.name}</strong>
+        </Link>
+        <nav className="bento-nav-links" aria-label="Main Navigation">
+          <Link href={`${prefix}#top`} className="bento-nav-item">Home</Link>
+          {c.sections.about && <Link href={`${prefix}#about`} className="bento-nav-item">About</Link>}
+          {c.sections.work && <Link href={`${prefix}#work`} className="bento-nav-item">Work</Link>}
+          {c.sections.expertise && <Link href={`${prefix}#services`} className="bento-nav-item">Services</Link>}
+          <Link href={`${prefix}#contact`} className="bento-nav-item">Contact</Link>
+        </nav>
+        <div className="bento-header-actions">
+          <Link href={`${prefix}#contact`} className="bento-cta-btn">
+            Let's Talk <span aria-hidden="true">&rarr;</span>
+          </Link>
+        </div>
+      </div>
+    </header>
   );
 };
 
@@ -108,16 +139,20 @@ export default function CaseStudy({
 }) {
   if (c.template === "visionary") return <VisionaryCaseStudy content={c} index={index} preview={preview} />;
   if (c.template === "noir") return <NoirCaseStudy content={c} index={index} preview={preview} />;
+  if (c.template === "aurora") return <AuroraCaseStudy content={c} index={index} preview={preview} />;
   
   const p = c.projects[index];
+  const storySections = projectStorySections(p);
   const next = c.projects[(index + 1) % c.projects.length];
   const base = preview ? "/admin/preview" : "";
     return (
     <>
       <ThemeInjector template={c.template || "architect"} colorMode={c.colorMode || "light"} />
-      <div className={`${c.template || "architect"}-wrapper theme-${c.colorMode || "light"}`}>
+      <div className={`${c.template || "architect"}-wrapper theme-${c.colorMode || "light"}`} data-template={c.template || "architect"} data-theme={c.colorMode || "light"}>
         <main id="top">
-      {(!c.template || c.template === "architect") ? (
+      {c.template === "bento" ? (
+        <BentoNav c={c} base={base} />
+      ) : (!c.template || c.template === "architect") ? (
         <ArchitectNav c={c} base={base} />
       ) : (
         <Nav name={c.hero.name} home base={base} sections={c.sections} />
@@ -169,7 +204,7 @@ export default function CaseStudy({
               ))}
             </ul>
           </section>
-          {p.blocks.map((b, i) => (
+          {storySections.map((b, i) => (
             <section key={i}>
               <h2>{b.heading}</h2>
               <p className="preserve-lines">{b.body}</p>
@@ -204,7 +239,7 @@ export default function CaseStudy({
         </div>
       </article>
     </main>
-    {(!c.template || c.template === "architect") && <ArchitectFooter c={c} base={base} />}
+    <TemplateFooter content={c} templateVariant={c.template || "architect"} base={base} />
     </div>
     </>
   );

@@ -4,7 +4,9 @@ import { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { SiteContent } from "@/lib/schema";
+import { projectStorySections } from "@/lib/schema";
 import MotionScene from "./MotionScene";
+import TemplateFooter from "../common/TemplateFooter";
 import "./styles.css";
 
 function Arrow() {
@@ -56,6 +58,7 @@ export default function NoirCaseStudy({
 }) {
   const [menu, setMenu] = useState(false);
   const p = c.projects[index];
+  const storySections = projectStorySections(p);
   const next = c.projects[(index + 1) % c.projects.length];
   const prefix = preview ? "/admin/preview" : "";
   const initial = (c.hero.name || "?").trim().charAt(0).toUpperCase();
@@ -111,6 +114,7 @@ export default function NoirCaseStudy({
               {links.map((l) => (
                 <Link key={l.href} href={l.href} onClick={() => setMenu(false)}>{l.label}</Link>
               ))}
+              <Link href={`${prefix}/#contact`} onClick={() => setMenu(false)}>Contact Me</Link>
             </div>
           </div>
         </header>
@@ -128,7 +132,7 @@ export default function NoirCaseStudy({
                 <h1 className="nx-h1" style={{ fontSize: "clamp(2.5rem, 5vw, 3.8rem)", margin: "0.5rem 0 1.5rem" }}>{p.title}</h1>
                 <p className="nx-lead" style={{ fontSize: "1.15rem", marginBottom: "2.5rem", maxWidth: "100%" }}>{p.description}</p>
 
-                <div className="nx-grid nx-grid--2" style={{ marginTop: 0 }}>
+                <div className="nx-grid nx-grid--2 nx-case-meta" style={{ marginTop: 0 }}>
                   {p.org && (
                     <div>
                       <span className="nx-eyebrow" style={{ fontSize: "0.8rem", letterSpacing: "0.05em" }}>ORGANIZATION</span>
@@ -166,8 +170,8 @@ export default function NoirCaseStudy({
               )}
 
               <section className="nx-sec nx-sec--tight" style={{ paddingTop: "1rem" }}>
-                <div className="nx-grid nx-grid--2">
-                  {p.blocks.map((b, i) => (
+                <div className="nx-grid nx-grid--2 nx-case-story">
+                  {storySections.map((b, i) => (
                     <div key={i}>
                       <h2 className="nx-h2" style={{ fontSize: "1.8rem" }}>{b.heading}</h2>
                       <p className="nx-lead" style={{ marginTop: "1rem", whiteSpace: "pre-wrap", fontSize: "1rem" }}>{b.body}</p>
@@ -190,7 +194,7 @@ export default function NoirCaseStudy({
               )}
             </div>
 
-            <div className="nx-stats" style={{ marginTop: "6rem", borderTop: "1px solid var(--nx-line)", paddingTop: "3rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div className="nx-case-next" style={{ marginTop: "6rem", borderTop: "1px solid var(--nx-line)", paddingTop: "3rem" }}>
               <Link href={`${prefix}/#contact`} className="nx-link">Have a project in mind? <Arrow /></Link>
               {next.slug !== p.slug && (
                 <Link href={`${prefix}/work/${next.slug}`} className="nx-link" style={{ textAlign: "right" }}>
@@ -202,34 +206,7 @@ export default function NoirCaseStudy({
         </main>
 
         {/* ───────── Footer ───────── */}
-        <footer className="nx-band nx-footer">
-          <Marquee items={marqueeItems} />
-          <div className="nx-wrap nx-footer-inner">
-            <div className="nx-footer-top">
-              <h2 className="nx-h2">Let&apos;s <span className="nx-accent">Connect</span> there</h2>
-              <a href={`mailto:${c.contact.email}`} className="nx-btn nx-btn--light">
-                Say Hello <span className="nx-btn-ico"><Arrow /></span>
-              </a>
-            </div>
-            <div className="nx-footer-cols">
-              <div>
-                <Link href={`${prefix}/#top`} className="nx-logo"><span className="nx-logo-mark">{initial}</span>{c.hero.name}</Link>
-                <p className="nx-band-text">{c.hero.title}</p>
-              </div>
-              <div>
-                <h4>Navigation</h4>
-                {links.map((l) => <Link key={l.href} href={l.href}>{l.label}</Link>)}
-              </div>
-              <div>
-                <h4>Contact</h4>
-                <a href={`mailto:${c.contact.email}`}>{c.contact.email}</a>
-              </div>
-            </div>
-            <div className="nx-copy">
-              <span>© {new Date().getFullYear()} {c.hero.name}. All Rights Reserved.</span>
-            </div>
-          </div>
-        </footer>
+        <TemplateFooter content={c} templateVariant="noir" base={prefix} />
       </div>
     </div>
   );

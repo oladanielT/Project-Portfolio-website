@@ -22,16 +22,20 @@ export async function serverClient() {
 }
 export async function adminSession() {
   if (!configured()) return null;
-  const db = await serverClient();
-  const {
-    data: { user },
-    error,
-  } = await db.auth.getUser();
-  if (error || !user) return null;
-  const { data: admin } = await db
-    .from("portfolio_admins")
-    .select("user_id")
-    .eq("user_id", user.id)
-    .maybeSingle();
-  return admin ? { db, user } : null;
+  try {
+    const db = await serverClient();
+    const {
+      data: { user },
+      error,
+    } = await db.auth.getUser();
+    if (error || !user) return null;
+    const { data: admin } = await db
+      .from("portfolio_admins")
+      .select("user_id")
+      .eq("user_id", user.id)
+      .maybeSingle();
+    return admin ? { db, user } : null;
+  } catch {
+    return null;
+  }
 }

@@ -1,0 +1,470 @@
+/* UNIFIED TEMPLATE FOOTER STYLES (MODELED ON TEMPLATE 4) */
+
+.tf-footer {
+  --tf-bg: var(--background, #0d0f12);
+  --tf-text: var(--foreground, #f3f4f6);
+  --tf-muted: var(--muted, color-mix(in srgb, var(--foreground, #ffffff) 68%, transparent));
+  --tf-border: var(--line, color-mix(in srgb, var(--foreground, #ffffff) 15%, transparent));
+  --tf-accent: var(--accent, #3b82f6);
+  --tf-accent-fg: var(--background, #ffffff);
+  --tf-marquee-bg: color-mix(in srgb, var(--foreground, #ffffff) 4%, transparent);
+  --tf-marquee-text: var(--foreground, #ffffff);
+  --tf-btn-bg: var(--foreground, #ffffff);
+  --tf-btn-text: var(--background, #000000);
+  --tf-btn-ico-bg: color-mix(in srgb, var(--background, #000000) 12%, transparent);
+  --tf-icon-bg: color-mix(in srgb, var(--foreground, #ffffff) 6%, transparent);
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  background: var(--tf-bg);
+  color: var(--tf-text);
+  border-top: 1px solid var(--tf-border);
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.tf-footer * {
+  box-sizing: border-box;
+}
+
+/* ───────── MARQUEE ───────── */
+.tf-marquee {
+  position: relative;
+  overflow: hidden;
+  background: var(--tf-marquee-bg, rgba(255, 255, 255, 0.03));
+  color: var(--tf-marquee-text, var(--tf-text, #ffffff));
+  border-bottom: 1px solid var(--tf-border, rgba(255, 255, 255, 0.08));
+  padding: 1.1rem 0;
+  user-select: none;
+}
+
+.tf-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: tf-scroll 32s linear infinite;
+}
+
+.tf-marquee:hover .tf-marquee-track {
+  animation-play-state: paused;
+}
+
+.tf-marquee-group {
+  display: flex;
+  flex: none;
+  align-items: center;
+}
+
+.tf-marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.75rem;
+  padding-right: 1.75rem;
+  font-size: clamp(1rem, 2vw, 1.35rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.tf-marquee-item svg {
+  color: var(--tf-accent, #3b82f6);
+  opacity: 0.8;
+}
+
+@keyframes tf-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ───────── FOOTER WRAP & TOP ───────── */
+.tf-wrap {
+  width: min(1200px, 100% - 3rem);
+  margin: 0 auto;
+}
+
+.tf-inner {
+  padding: clamp(3rem, 6vw, 4.5rem) 0 2rem;
+}
+
+.tf-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid var(--tf-border, rgba(255, 255, 255, 0.1));
+}
+
+.tf-eyebrow {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--tf-accent, #3b82f6);
+  margin-bottom: 0.5rem;
+}
+
+.tf-title {
+  font-size: clamp(1.8rem, 4vw, 2.75rem);
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0;
+  color: var(--tf-text, #ffffff);
+}
+
+.tf-accent {
+  color: var(--tf-accent, #3b82f6);
+}
+
+.tf-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--tf-btn-bg, #ffffff);
+  color: var(--tf-btn-text, #111111) !important;
+  padding: 0.85rem 1.75rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+}
+
+.tf-cta-btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.95;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.tf-btn-ico {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--tf-btn-ico-bg, rgba(0, 0, 0, 0.08));
+}
+
+/* ───────── 3-COLUMN GRID ───────── */
+.tf-cols {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 3rem;
+  padding: 3.5rem 0 2.5rem;
+}
+
+.tf-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+/* Brand column */
+.tf-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: inherit;
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.tf-monogram {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: var(--tf-accent, #3b82f6);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+
+.tf-name {
+  color: var(--tf-text, #ffffff);
+}
+
+.tf-tagline {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--tf-muted, rgba(255, 255, 255, 0.65));
+  margin: 0.25rem 0 0;
+  max-width: 320px;
+}
+
+.tf-location {
+  font-size: 0.85rem;
+  color: var(--tf-muted, rgba(255, 255, 255, 0.6));
+  margin: 0;
+}
+
+.tf-cv-link {
+  display: inline-block;
+  font-size: 0.85rem;
+  color: var(--tf-accent, #3b82f6);
+  text-decoration: none;
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+.tf-cv-link:hover {
+  text-decoration: underline;
+}
+
+/* Navigation column */
+.tf-col-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--tf-text, #ffffff);
+  margin: 0 0 0.5rem;
+}
+
+.tf-nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.tf-nav-link {
+  color: var(--tf-muted, color-mix(in srgb, var(--tf-text) 72%, transparent));
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: color 0.2s ease, transform 0.2s ease;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.tf-nav-link:hover {
+  color: var(--tf-accent, #3b82f6);
+  transform: translateX(3px);
+}
+
+/* Contact column */
+.tf-email-link {
+  color: var(--tf-text, #ffffff);
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-decoration: none;
+  word-break: break-all;
+  transition: color 0.2s ease;
+}
+
+.tf-email-link:hover {
+  color: var(--tf-accent, #3b82f6);
+}
+
+.tf-availability {
+  font-size: 0.85rem;
+  color: var(--tf-muted, rgba(255, 255, 255, 0.55));
+  margin: 0;
+  line-height: 1.4;
+}
+
+.tf-socials {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.tf-social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--tf-icon-bg, rgba(255, 255, 255, 0.06));
+  color: var(--tf-text, #ffffff);
+  border: 1px solid var(--tf-border, rgba(255, 255, 255, 0.1));
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.tf-social-icon:hover {
+  background: var(--tf-accent, #3b82f6);
+  color: var(--tf-accent-fg, #ffffff) !important;
+  border-color: var(--tf-accent, #3b82f6);
+  transform: translateY(-2px);
+}
+
+.tf-social-icon.is-unconfigured {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+/* ───────── BOTTOM BAR ───────── */
+.tf-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--tf-border, rgba(255, 255, 255, 0.08));
+  font-size: 0.85rem;
+  color: var(--tf-muted, rgba(255, 255, 255, 0.5));
+}
+
+.tf-top-link {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.tf-top-link:hover {
+  color: var(--tf-accent, #3b82f6);
+}
+
+/* ───────── THEME & TEMPLATE ADAPTATIONS ───────── */
+
+/* 1. Architect Variant */
+.tf-variant-architect,
+[data-template="architect"] .tf-footer,
+.architect-wrapper .tf-footer {
+  --tf-bg: var(--color-bg, #FAFAFA);
+  --tf-text: var(--color-text, #111111);
+  --tf-muted: var(--color-text-muted, #666666);
+  --tf-border: var(--color-border, rgba(0, 0, 0, 0.09));
+  --tf-accent: var(--color-accent, var(--color-primary, #0044ff));
+  --tf-accent-fg: var(--color-accent-fg, #ffffff);
+  --tf-marquee-bg: var(--color-surface, #ffffff);
+  --tf-marquee-text: var(--color-text, #111111);
+  --tf-btn-bg: var(--color-primary, #111111);
+  --tf-btn-text: var(--color-primary-fg, #ffffff);
+  --tf-icon-bg: var(--color-surface, rgba(0, 0, 0, 0.04));
+}
+
+/* 2. Visionary Variant */
+.tf-variant-visionary {
+  --tf-bg: var(--v-soft, color-mix(in srgb, var(--foreground, #ffffff) 4%, var(--background, #0f172a)));
+  --tf-text: var(--v-ink, var(--foreground, #f8fafc));
+  --tf-muted: var(--v-muted, var(--muted, color-mix(in srgb, var(--foreground, #ffffff) 68%, transparent)));
+  --tf-border: var(--v-line, var(--line, color-mix(in srgb, var(--foreground, #ffffff) 16%, transparent)));
+  --tf-accent: var(--v-accent, var(--accent, #38bdf8));
+  --tf-accent-fg: var(--background, #ffffff);
+  --tf-marquee-bg: color-mix(in srgb, var(--v-ink, var(--foreground, #ffffff)) 3%, transparent);
+  --tf-marquee-text: var(--v-ink, var(--foreground, #ffffff));
+  --tf-btn-bg: var(--v-ink, var(--foreground, #ffffff));
+  --tf-btn-text: var(--v-paper, var(--background, #0f172a));
+  --tf-icon-bg: color-mix(in srgb, var(--v-ink, var(--foreground, #ffffff)) 6%, transparent);
+}
+
+/* 3. Bento Variant */
+.tf-variant-bento {
+  --tf-bg: var(--surface-deep, var(--background, #090a0f));
+  --tf-text: var(--foreground, #ededed);
+  --tf-muted: var(--muted, color-mix(in srgb, var(--foreground, #ffffff) 70%, transparent));
+  --tf-border: var(--line, color-mix(in srgb, var(--foreground, #ffffff) 12%, transparent));
+  --tf-accent: var(--accent, #6366f1);
+  --tf-accent-fg: var(--background, #ffffff);
+  --tf-marquee-bg: var(--surface-raised, color-mix(in srgb, var(--foreground, #ffffff) 4%, transparent));
+  --tf-marquee-text: var(--foreground, #ededed);
+  --tf-btn-bg: var(--foreground, #ffffff);
+  --tf-btn-text: var(--background, #090a0f);
+  --tf-icon-bg: var(--surface, color-mix(in srgb, var(--foreground, #ffffff) 6%, transparent));
+}
+
+/* 4. Template 5 Variant */
+.tf-variant-template5,
+[data-template="template5"] .tf-footer,
+.template5-wrapper .tf-footer {
+  --tf-bg: var(--color-bg, var(--background, #fdf5f2));
+  --tf-text: var(--color-text, var(--foreground, #202020));
+  --tf-muted: var(--color-text-muted, var(--muted, #555555));
+  --tf-border: var(--color-border, var(--line, rgba(0, 0, 0, 0.08)));
+  --tf-accent: var(--color-accent, var(--accent, #f27c54));
+  --tf-accent-fg: #ffffff;
+  --tf-marquee-bg: var(--color-surface, #ffffff);
+  --tf-marquee-text: var(--color-text, var(--foreground, #202020));
+  --tf-btn-bg: var(--color-accent, var(--accent, #f27c54));
+  --tf-btn-text: #ffffff;
+  --tf-icon-bg: var(--color-surface, #ffffff);
+}
+
+/* 5. Theme Overrides for All Variants */
+:is([data-theme="pitch-black"], .theme-pitch-black) .tf-footer:not(.tf-variant-architect):not(.tf-variant-template5) {
+  --tf-bg: #000000;
+  --tf-text: #ffffff;
+  --tf-muted: #999999;
+  --tf-border: rgba(255, 255, 255, 0.15);
+  --tf-accent: #ffffff;
+  --tf-accent-fg: #000000;
+  --tf-btn-bg: #ffffff;
+  --tf-btn-text: #000000;
+}
+
+:is([data-theme="monochrome"], .theme-monochrome) .tf-footer:not(.tf-variant-architect):not(.tf-variant-template5) {
+  --tf-bg: #ffffff;
+  --tf-text: #000000;
+  --tf-muted: #555555;
+  --tf-border: #000000;
+  --tf-accent: #000000;
+  --tf-accent-fg: #ffffff;
+  --tf-btn-bg: #000000;
+  --tf-btn-text: #ffffff;
+}
+
+:is([data-theme="cream"], .theme-cream) .tf-footer:not(.tf-variant-architect):not(.tf-variant-template5) {
+  --tf-bg: #fdfbf7;
+  --tf-text: #2d2a26;
+  --tf-muted: #6b645b;
+  --tf-border: rgba(0, 0, 0, 0.12);
+  --tf-accent: #a6865c;
+  --tf-accent-fg: #ffffff;
+  --tf-btn-bg: #2d2a26;
+  --tf-btn-text: #fdfbf7;
+}
+
+:is([data-theme="light"], .theme-light) .tf-footer:not(.tf-variant-architect):not(.tf-variant-template5) {
+  --tf-bg: #ffffff;
+  --tf-text: #000000;
+  --tf-muted: #4b5563;
+  --tf-border: rgba(0, 0, 0, 0.12);
+  --tf-accent: #0044ff;
+  --tf-accent-fg: #ffffff;
+  --tf-btn-bg: #000000;
+  --tf-btn-text: #ffffff;
+}
+
+/* ───────── RESPONSIVE BREAKPOINTS ───────── */
+@media (max-width: 900px) {
+  .tf-cols {
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+  }
+  .tf-col-brand {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 640px) {
+  .tf-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .tf-cols {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 2.5rem 0 2rem;
+  }
+  .tf-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

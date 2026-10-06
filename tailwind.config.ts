@@ -23,6 +23,7 @@ const config: Config = {
       },
       maxWidth: {
         content: "1180px",
+        "8xl": "90rem",
       },
     },
   },

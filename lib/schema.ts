@@ -1,4 +1,5 @@
 import { z } from "zod";
+
 const short = z.string().trim().max(200);
 const text = z.string().trim().max(12000);
 const link = z
@@ -9,6 +10,22 @@ const link = z
       !v || /^https:\/\//i.test(v) || /^\/api\/media\/[0-9a-f-]{36}$/i.test(v),
     "Use an HTTPS URL or an uploaded media URL",
   );
+
+export const defaultFaqs = [
+  {
+    question: "How do you approach a new project?",
+    answer: "I start by understanding the goals, people, and constraints, then shape a clear plan and work with the team to deliver it.",
+  },
+  {
+    question: "What kind of projects do you take on?",
+    answer: "I’m open to thoughtful projects where my experience can help a team solve a meaningful problem and create a useful result.",
+  },
+  {
+    question: "How can we work together?",
+    answer: "Use the contact form or email below to share a little about your project. I’ll get back to you to discuss the next steps.",
+  },
+];
+
 export const projectSchema = z.object({
   title: short.min(1),
   slug: z
@@ -23,6 +40,9 @@ export const projectSchema = z.object({
   category: short,
   role: short,
   featured: z.boolean(),
+  challenge: text.optional(),
+  approach: text.optional(),
+  result: text.optional(),
   blocks: z
     .array(
       z.object({
@@ -32,8 +52,37 @@ export const projectSchema = z.object({
         alt: short.optional(),
       }),
     )
-    .max(30),
+    .default([]),
+}).transform((p) => {
+  const challengeFromBlocks = (p.blocks || []).find((b) => /challenge/i.test(b.heading))?.body;
+  const approachFromBlocks = (p.blocks || []).find((b) => /approach/i.test(b.heading))?.body;
+  const resultFromBlocks = (p.blocks || []).find((b) => /result/i.test(b.heading))?.body;
+
+  const challenge = p.challenge || challengeFromBlocks || undefined;
+  const approach = p.approach || approachFromBlocks || undefined;
+  const result = p.result || resultFromBlocks || undefined;
+
+  let blocks = [...(p.blocks || [])];
+  if (challenge && !blocks.some((b) => /challenge/i.test(b.heading))) {
+    blocks.unshift({ heading: "01 The challenge", body: challenge });
+  }
+  if (approach && !blocks.some((b) => /approach/i.test(b.heading))) {
+    const cIdx = blocks.findIndex((b) => /challenge/i.test(b.heading));
+    blocks.splice(cIdx >= 0 ? cIdx + 1 : 0, 0, { heading: "02 My approach", body: approach });
+  }
+  if (result && !blocks.some((b) => /result/i.test(b.heading))) {
+    blocks.push({ heading: "03 The result", body: result });
+  }
+
+  return {
+    ...p,
+    challenge,
+    approach,
+    result,
+    blocks,
+  };
 });
+
 export const siteSchema = z.object({
   template: z.enum([
     "elegant", "classic", "architect", "visionary", "bold",
@@ -94,6 +143,7 @@ export const siteSchema = z.object({
     ),
   testimonial: z.object({ quote: text, name: short, role: short }),
   testimonials: z.array(z.object({ quote: text, name: short, role: short })).optional(),
+  faqs: z.array(z.object({ question: short.min(1), answer: text })).max(30).default([]),
   contact: z.object({
     heading: short,
     subheading: text,
@@ -115,8 +165,45 @@ export const siteSchema = z.object({
     process: z.boolean(),
     tools: z.boolean(),
     testimonial: z.boolean(),
+    faqs: z.boolean().default(true),
   }),
   seo: z.object({ title: short.min(1), description: z.string().max(500) }),
+}).transform((content) => {
+  const testimonials = [...(content.testimonials || [])];
+  const legacy = content.testimonial;
+  if (content.testimonials === undefined && legacy.quote) {
+    testimonials.push(legacy);
+  } else if (
+    legacy.quote &&
+    !testimonials.some(
+      (item) => item.name === legacy.name || item.quote === legacy.quote,
+    )
+  ) {
+    testimonials.push(legacy);
+  }
+  return {
+    ...content,
+    testimonial: testimonials[0] || { quote: "", name: "", role: "" },
+    testimonials,
+  };
 });
+
 export type SiteContent = z.infer<typeof siteSchema>;
 export type Project = z.infer<typeof projectSchema>;
+
+export function projectStorySections(project: Project) {
+  const named = [
+    { heading: "The challenge", value: project.challenge, pattern: /challenge/i },
+    { heading: "My approach", value: project.approach, pattern: /approach/i },
+    { heading: "The result", value: project.result, pattern: /result/i },
+  ];
+  const story = named.flatMap(({ heading, value, pattern }) => {
+    const legacy = (project.blocks || []).find((block) => pattern.test(block.heading));
+    const body = value || legacy?.body;
+    return body ? [{ ...(legacy || {}), heading, body }] : [];
+  });
+  const additional = (project.blocks || []).filter(
+    (block) => !named.some(({ pattern }) => pattern.test(block.heading)),
+  );
+  return [...story, ...additional];
+}

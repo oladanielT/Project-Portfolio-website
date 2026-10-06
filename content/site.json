@@ -220,47 +220,47 @@
     {
       "name": "Jira",
       "purpose": "Tool",
-      "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jira/jira-original.svg"
+      "logo": "https://cdn.simpleicons.org/jira"
     },
     {
       "name": "Trello",
       "purpose": "Tool",
-      "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/trello/trello-original.svg"
+      "logo": "https://cdn.simpleicons.org/trello"
     },
     {
       "name": "Figma",
       "purpose": "Tool",
-      "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/figma/figma-original.svg"
+      "logo": "https://cdn.simpleicons.org/figma"
     },
     {
       "name": "Google Workspace",
       "purpose": "Tool",
-      "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/google/google-original.svg"
+      "logo": "https://cdn.simpleicons.org/googleworkspace"
     },
     {
       "name": "Slack",
       "purpose": "Tool",
-      "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/slack/slack-original.svg"
+      "logo": "https://cdn.simpleicons.org/slack"
     },
     {
       "name": "Notion",
       "purpose": "Tool",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/e/e9/Notion-logo.svg"
+      "logo": "https://cdn.simpleicons.org/notion"
     },
     {
       "name": "Google Analytics",
       "purpose": "Tool",
-      "logo": "https://www.vectorlogo.zone/logos/google_analytics/google_analytics-icon.svg"
+      "logo": "https://cdn.simpleicons.org/googleanalytics"
     },
     {
       "name": "GitHub",
       "purpose": "Tool",
-      "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg"
+      "logo": "https://cdn.simpleicons.org/github"
     },
     {
       "name": "ChatGPT",
       "purpose": "Tool",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg"
+      "logo": "https://cdn.simpleicons.org/openai"
     }
   ],
   "sections": {
@@ -286,6 +286,16 @@
       "quote": "Tiwaloluwa brings a rare combination of strategic thinking and hands-on execution. She takes ownership, coordinates people effectively, and consistently finds practical ways to move the business forward.",
       "name": "Dr Tolulope Okedere",
       "role": "Chief Executive Officer, FoodMartex"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "What does a product manager bring to a team?",
+      "answer": "I bring structure to product decisions, align teams around user and business needs, and help turn priorities into work that can be delivered."
+    },
+    {
+      "question": "How do you approach a new product or project?",
+      "answer": "I start by understanding the users, business goals, and constraints, then define priorities and coordinate the team through delivery and learning."
     }
   ]
 }
