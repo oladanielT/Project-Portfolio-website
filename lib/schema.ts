@@ -7,8 +7,11 @@ const link = z
   .max(2048)
   .refine(
     (v) =>
-      !v || /^https:\/\//i.test(v) || /^\/api\/media\/[0-9a-f-]{36}$/i.test(v),
-    "Use an HTTPS URL or an uploaded media URL",
+      !v ||
+      /^https?:\/\//i.test(v) ||
+      /^\//i.test(v) ||
+      /^data:image\//i.test(v),
+    "Use a valid URL, uploaded media path, or local image path",
   );
 
 export const defaultFaqs = [

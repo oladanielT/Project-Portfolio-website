@@ -68,6 +68,9 @@ export default function Portfolio({
     { href: "#contact", label: "Contact" },
   ];
 
+  const [heroImgFailed, setHeroImgFailed] = useState(false);
+  const heroIntro = typeof c.hero.intro === "string" ? c.hero.intro.split("\n\n")[0] : c.hero.intro;
+
   return (
     <div className={`architect-wrapper theme-${c.colorMode || "light"}`} data-template="architect" data-theme={c.colorMode || "light"}>
       <MotionScene />
@@ -76,9 +79,8 @@ export default function Portfolio({
       {/* 0. NAVBAR */}
       <nav className="site-nav" aria-label="Main Navigation">
         <div className="nav-left">
-          <Link href="#hero" className="brand-logo">
-            <span className="name-full">{c.hero.name}</span>
-            <span className="name-short">{c.hero.name.split(" ")[0]}</span>
+          <Link href="#hero" className="brand-logo" aria-label={`${c.hero.name} home`}>
+            <span className="brand-logo-mark">O</span>
           </Link>
         </div>
         <div className="nav-center">
@@ -104,7 +106,7 @@ export default function Portfolio({
             )}
             <h1 className="hero-title">{c.hero.name}</h1>
             {c.hero.title && <p className="hero-subtitle-text">{c.hero.title}</p>}
-            <p className="hero-intro">{c.hero.intro}</p>
+            <p className="hero-intro">{heroIntro}</p>
             <div className="hero-actions">
               <Link href="#work" className="btn-primary">{c.hero.ctaLabel || "Explore Work"}</Link>
               <Link href="#contact" className="btn-secondary">Contact Us</Link>
@@ -112,7 +114,7 @@ export default function Portfolio({
           </div>
           <div className="hero-visual">
             <div className="hero-image-mask">
-              {c.hero.photo && (
+              {c.hero.photo && !heroImgFailed ? (
                 <Image
                   src={c.hero.photo}
                   alt={c.hero.name}
@@ -121,7 +123,12 @@ export default function Portfolio({
                   unoptimized
                   className="obj-cover"
                   style={{ objectPosition: c.hero.photoPosition || "center" }}
+                  onError={() => setHeroImgFailed(true)}
                 />
+              ) : (
+                <div className="hero-fallback-avatar">
+                  <span>O</span>
+                </div>
               )}
             </div>
           </div>

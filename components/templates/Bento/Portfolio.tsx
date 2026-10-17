@@ -41,6 +41,7 @@ export default function Portfolio({
   ];
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [heroImgFailed, setHeroImgFailed] = useState(false);
 
   return (
     <div className="bento-wrapper" data-template="bento" data-theme={c.colorMode || "light"}>
@@ -49,9 +50,8 @@ export default function Portfolio({
       {/* 0. HEADER / NAVBAR */}
       <header className="bento-header" id="top">
         <div className="bento-header-inner">
-          <Link href="#top" className="bento-brand">
-            <span className="bento-brand-dot">●</span>
-            <strong>{c.hero.name}</strong>
+          <Link href="#top" className="bento-brand" aria-label={`${c.hero.name} home`}>
+            <span className="bento-logo-mark">O</span>
           </Link>
           <nav className="bento-nav-links" aria-label="Main Navigation">
             {navLinks.map((l) => (
@@ -121,7 +121,7 @@ export default function Portfolio({
             <h2 className="bento-hero-title">{c.hero.title}</h2>
           )}
           <p className="bento-hero-desc">
-            {c.hero.intro}
+            {typeof c.hero.intro === "string" ? c.hero.intro.split("\n\n")[0] : c.hero.intro}
           </p>
           <div className="bento-hero-actions">
             <a href="#work" className="bento-button bento-btn-primary">
@@ -134,13 +134,14 @@ export default function Portfolio({
         </div>
 
         <div className="bento-card bento-hero-portrait bento-reveal">
-          {c.hero.photo ? (
+          {c.hero.photo && !heroImgFailed ? (
             <Image
               src={c.hero.photo}
               alt={c.hero.name}
               style={{ objectPosition: c.hero.photoPosition || "center", objectFit: "cover" }}
               fill
               unoptimized
+              onError={() => setHeroImgFailed(true)}
             />
           ) : (
             <div className="bento-portrait-fallback">

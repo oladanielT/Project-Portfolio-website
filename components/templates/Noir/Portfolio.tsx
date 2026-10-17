@@ -88,6 +88,7 @@ function Star({ size = 22 }: { size?: number }) {
   );
 }
 
+
 function Marquee({ items }: { items: string[] }) {
   const base = items.length >= 5 ? items : [...items, ...items, ...items];
   const group = (key: string) => (
@@ -101,10 +102,12 @@ function Marquee({ items }: { items: string[] }) {
     </div>
   );
   return (
-    <div className="nx-marquee">
-      <div className="nx-marquee-track">
-        {group("a")}
-        {group("b")}
+    <div className="nx-wrap">
+      <div className="nx-marquee">
+        <div className="nx-marquee-track">
+          {group("a")}
+          {group("b")}
+        </div>
       </div>
     </div>
   );
@@ -160,11 +163,6 @@ export default function Portfolio({
   let heroImg: string | undefined =
     hero.image || hero.photo || hero.portrait || hero.avatar || about.image || about.photo;
 
-  if (heroImg && heroImg.includes("res.cloudinary.com")) {
-    heroImg = heroImg.replace("/upload/", "/upload/e_background_removal/f_png/");
-    heroImg = heroImg.replace(/\.(jpg|jpeg)$/i, ".png");
-  }
-
   const aboutImg: string | undefined = about.image || about.photo || heroImg;
   const tagline: string | undefined = hero.tagline || hero.subtitle || hero.description || paragraphs[0];
   const cvUrl: string | undefined = about.cvUrl || hero.cvUrl || x.cvUrl;
@@ -192,6 +190,7 @@ export default function Portfolio({
 
   const [menu, setMenu] = useState(false);
   const [openFaq, setOpenFaq] = useState(0);
+  const [heroImgFailed, setHeroImgFailed] = useState(false);
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
@@ -216,9 +215,8 @@ export default function Portfolio({
       <header className="nx-header">
         <div className="nx-wrap">
           <div className="nx-nav">
-            <a href="#top" className="nx-logo">
+            <a href="#top" className="nx-logo" aria-label={`${c.hero.name} home`}>
               <span className="nx-logo-mark">{initial}</span>
-              {c.hero.name}
             </a>
             <nav className="nx-links" aria-label="Primary">
               {links.map((l) => (
@@ -266,41 +264,39 @@ export default function Portfolio({
               </div>
             </div>
 
-            <div className="nx-hero-media" style={{ position: "relative", width: "min(100%, 420px)", aspectRatio: "1 / 1" }}>
-              {/* Blob background */}
-              <div style={{
-                position: "absolute",
-                top: "5%", left: "5%", right: "5%", bottom: "5%",
-                background: "var(--nx-accent)",
-                opacity: 0.8,
-                borderRadius: "40% 60% 70% 30% / 40% 50% 60% 50%",
-                animation: "nx-spin 20s linear infinite",
-                zIndex: 0
-              }} />
+<div className="nx-hero-media nx-hero-media--circle">
+  {/* Blob (only visible in the cutout variant) */}
+  <div className="nx-blob" aria-hidden />
 
-              {/* Image container */}
-              <div className="nx-hero-photo" style={{ position: "absolute", inset: 0, borderRadius: "2rem", background: "transparent", zIndex: 1 }}>
-                {heroImg ? (
-                  <Image src={heroImg} alt={c.hero.name} fill priority unoptimized style={{ objectFit: "contain", background: "transparent" }} />
-                ) : (
-                  <span className="nx-monogram">{initial}</span>
-                )}
-              </div>
-              <span className="nx-hero-float nx-float-tag nx-float-tag--light" style={{ zIndex: 10 }}>● Available for work</span>
-              <div className="nx-hero-float nx-badge" style={{ zIndex: 10 }} aria-hidden>
-                <svg className="nx-badge-svg" viewBox="0 0 120 120">
-                  <defs>
-                    <path id="nx-circ" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0" />
-                  </defs>
-                  <text fontSize="10" fontWeight="700" fill="currentColor" letterSpacing="1">
-                    <textPath href="#nx-circ" textLength="272" lengthAdjust="spacing">
-                      Available for work • Available for work •
-                    </textPath>
-                  </text>
-                </svg>
-                <span className="nx-badge-ico"><Arrow /></span>
-              </div>
-            </div>
+  {/* Image */}
+  <div className="nx-hero-photo">
+    {heroImg && !heroImgFailed ? (
+      <Image
+        className="nx-hero-img"
+        src={heroImg}
+        alt={c.hero.name}
+        fill
+        priority
+        unoptimized
+        onError={() => setHeroImgFailed(true)}
+      />
+    ) : (
+      <span className="nx-monogram">{initial}</span>
+    )}
+  </div>
+
+  <span className="nx-status">
+    <i className="nx-status-dot" aria-hidden />
+    Available for projects
+  </span>
+
+  <div className="nx-stat-card">
+    <strong>{c.hero.statValue ?? "5+"}</strong>
+    <span>{c.hero.statLabel ?? "Years building for the web"}</span>
+  </div>
+</div>
+
+         
           </div>
         </section>
 
@@ -543,13 +539,13 @@ export default function Portfolio({
       {/* ───────── Footer ───────── */}
       <footer className="nx-band nx-footer">
         <Marquee items={marqueeItems} />
-        <div className="nx-wrap nx-footer-inner">
-          <div className="nx-footer-top">
+        <div className="nx-wrap">
+          {/* <div className="nx-footer-top">
             <h2 className="nx-h2">Let&apos;s <span className="nx-accent">Connect</span> there</h2>
             <a href={`mailto:${c.contact.email}`} className="nx-btn nx-btn--light">
               Say Hello <span className="nx-btn-ico"><Arrow /></span>
             </a>
-          </div>
+          </div> */}
           <div className="nx-footer-cols">
             <div>
               <a href="#top" className="nx-logo"><span className="nx-logo-mark">{initial}</span>{c.hero.name}</a>

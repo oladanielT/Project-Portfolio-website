@@ -27,9 +27,8 @@ export default function Nav({
   return (
     <header className="site-header">
       <div className="page-width nav-inner">
-        <a className="brand" href={home ? base || "/" : "#top"}>
-          {name.split(" ")[0]}
-          <span>.</span>
+        <a className="brand" href={home ? base || "/" : "#top"} aria-label={name}>
+          <span className="brand-logo-mark">O</span>
         </a>
         <button
           id="menu-toggle"

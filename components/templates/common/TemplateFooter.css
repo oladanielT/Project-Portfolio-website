@@ -371,7 +371,7 @@
   --tf-text: var(--foreground, #ededed);
   --tf-muted: var(--muted, color-mix(in srgb, var(--foreground, #ffffff) 70%, transparent));
   --tf-border: var(--line, color-mix(in srgb, var(--foreground, #ffffff) 12%, transparent));
-  --tf-accent: var(--accent, #6366f1);
+  --tf-accent: var(--accent, #10b981);
   --tf-accent-fg: var(--background, #ffffff);
   --tf-marquee-bg: var(--surface-raised, color-mix(in srgb, var(--foreground, #ffffff) 4%, transparent));
   --tf-marquee-text: var(--foreground, #ededed);

@@ -40,6 +40,14 @@ export async function GET() {
 
   if (content.faqs.length === 0) content.faqs = defaultFaqs;
 
+  // Self-healing: if hero/about photos point to inaccessible cloud endpoint, restore working photo
+  if (content.hero?.photo && content.hero.photo.includes("ccd2uu5i")) {
+    content.hero.photo = defaultContent.hero.photo;
+  }
+  if (content.about?.photo && content.about.photo.includes("ccd2uu5i")) {
+    content.about.photo = defaultContent.about.photo;
+  }
+
   // Self-healing: if draft lost project stories/challenges, restore from defaultContent
   content.projects = content.projects.map((p) => {
     const seedProject = defaultContent.projects.find((sp) => sp.slug === p.slug);

@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { FormEvent } from "react";
@@ -86,6 +89,7 @@ export function ProjectCard({
     </article>
   );
 }
+
 export default function Portfolio({
   content: c,
   preview = false,
@@ -94,6 +98,7 @@ export default function Portfolio({
   contactReady?: boolean;
   preview?: boolean;
 }) {
+  const [heroImgFailed, setHeroImgFailed] = useState(false);
   const name = c.hero.name.split(" ");
   const projects = [...c.projects].sort(
     (a, b) => Number(b.featured) - Number(a.featured),
@@ -149,7 +154,7 @@ export default function Portfolio({
                 </span>
               </h1>
               <p className="hero-role hero-enter">{c.hero.title}</p>
-              <p className="hero-intro hero-enter">{c.hero.intro}</p>
+              <p className="hero-intro hero-enter">{typeof c.hero.intro === "string" ? c.hero.intro.split("\n\n")[0] : c.hero.intro}</p>
               <div className="hero-actions hero-enter">
                 <a
                   href={c.sections.work ? "#work" : "#contact"}
@@ -166,7 +171,7 @@ export default function Portfolio({
             <div className="hero-portrait">
               <div className="portrait-outline" aria-hidden="true" />
               <div className="portrait-frame">
-                {c.hero.photo && (
+                {c.hero.photo && !heroImgFailed ? (
                   <Image
                     src={c.hero.photo}
                     alt={c.hero.name}
@@ -175,7 +180,12 @@ export default function Portfolio({
                     priority
                     unoptimized
                     sizes="(min-width: 900px) 40vw, 90vw"
+                    onError={() => setHeroImgFailed(true)}
                   />
+                ) : (
+                  <div className="classic-fallback-avatar">
+                    <span>O</span>
+                  </div>
                 )}
               </div>
               <div className="portrait-note">

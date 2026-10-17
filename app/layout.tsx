@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { getContent } from "@/lib/content";
+import { getSiteUrl } from "@/lib/site-url";
 
 const display = localFont({
   src: [
@@ -36,14 +37,27 @@ const mono = localFont({
 });
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { seo } = await getContent();
+  const content = await getContent();
+  const { seo } = content;
+  const image = content.hero.photo || undefined;
   return {
+    metadataBase: getSiteUrl(),
     title: seo.title,
     description: seo.description,
+    alternates: { canonical: "/" },
     openGraph: {
       title: seo.title,
       description: seo.description,
       type: "website",
+      siteName: content.hero.name,
+      url: "/",
+      images: image ? [{ url: image, alt: `${content.hero.name} portfolio` }] : undefined,
+    },
+    twitter: {
+      card: image ? "summary_large_image" : "summary",
+      title: seo.title,
+      description: seo.description,
+      images: image ? [image] : undefined,
     },
   };
 }

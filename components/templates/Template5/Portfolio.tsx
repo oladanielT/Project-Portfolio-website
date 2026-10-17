@@ -7,6 +7,8 @@ import MotionScene from "./MotionScene";
 import TemplateFooter from "../common/TemplateFooter";
 import "./styles.css";
 
+import { useState } from "react";
+
 export default function Template5Portfolio({
   content,
   contactReady,
@@ -18,6 +20,7 @@ export default function Template5Portfolio({
 }) {
   const faqs = (content.faqs && content.faqs.length > 0) ? content.faqs : defaultFaqs;
 
+  const [heroImgFailed, setHeroImgFailed] = useState(false);
   const navLinks = [
     { href: "#hero", label: "Home" },
     ...(content.sections.about ? [{ href: "#about", label: "About" }] : []),
@@ -33,7 +36,9 @@ export default function Template5Portfolio({
     <div className="template5-wrapper" data-template="template5" id="hero">
       <header className="nav-header">
         <div className="nav-brand">
-          {content.hero.name.split(" ")[0]}<span>.</span>
+          <Link href="#hero" className="t5-logo-link" aria-label={`${content.hero.name} home`}>
+            <span className="t5-logo-mark">O</span>
+          </Link>
         </div>
         <nav className="nav-links">
           {navLinks.map((l) => (
@@ -57,7 +62,7 @@ export default function Template5Portfolio({
               {content.hero.eyebrow}
             </div>
             <p className="hero-intro">
-              {content.hero.intro}
+              {typeof content.hero.intro === "string" ? content.hero.intro.split("\n\n")[0] : content.hero.intro}
             </p>
             <div className="hero-actions">
               <Link href="#work" className="btn btn-primary">
@@ -71,15 +76,22 @@ export default function Template5Portfolio({
           
           <div className="hero-visual">
             <MotionScene />
-            {content.hero.photo && (
+            {content.hero.photo && !heroImgFailed ? (
               <Image 
                 src={content.hero.photo} 
                 alt={content.hero.name} 
                 width={400} 
                 height={400} 
                 className="avatar"
+                unoptimized
+                priority
                 style={{ objectPosition: content.hero.photoPosition || "center" }}
+                onError={() => setHeroImgFailed(true)}
               />
+            ) : (
+              <div className="avatar t5-fallback-avatar">
+                <span>O</span>
+              </div>
             )}
             
             <div className="glass-card">

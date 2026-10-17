@@ -125,6 +125,7 @@ export default function Portfolio({
   preview?: boolean;
 }) {
   const root = useRef<HTMLDivElement>(null);
+  const [heroImgFailed, setHeroImgFailed] = useState(false);
   const projects = c.sections.work
     ? [...c.projects].sort((a, b) => Number(b.featured) - Number(a.featured))
     : [];
@@ -170,7 +171,7 @@ export default function Portfolio({
               )}
               <h1 id="v-hero-title">{c.hero.name}</h1>
               {c.hero.title && <p className="v-hero-title">{c.hero.title}</p>}
-              <p className="v-hero-intro">{c.hero.intro}</p>
+              <p className="v-hero-intro">{typeof c.hero.intro === "string" ? c.hero.intro.split("\n\n")[0] : c.hero.intro}</p>
               <div className="v-actions">
                 <a
                   className="v-button"
@@ -198,7 +199,7 @@ export default function Portfolio({
             </div>
 
             <div className="v-hero-visual">
-              {c.hero.photo ? (
+              {c.hero.photo && !heroImgFailed ? (
                 <Image
                   src={c.hero.photo}
                   alt={c.hero.name}
@@ -207,6 +208,7 @@ export default function Portfolio({
                   unoptimized
                   sizes="(max-width: 760px) 100vw, 50vw"
                   style={{ objectPosition: c.hero.photoPosition }}
+                  onError={() => setHeroImgFailed(true)}
                 />
               ) : (
                 <div className="v-hero-art v-art-no-photo" aria-hidden="true">
@@ -597,12 +599,13 @@ export default function Portfolio({
                   key={`${tool.name}-${i}`}
                   data-v-reveal
                 >
-                  <div className="v-tool-icon">
+                  <div className={`v-tool-icon${tool.name.toLowerCase().includes("apple") ? " v-tool-icon-apple" : ""}`}>
                     {tool.logo ? (
                       <Image
                         src={tool.logo}
                         width={36}
                         height={36}
+                        className={tool.name.toLowerCase().includes("apple") ? "v-tool-logo-apple" : undefined}
                         alt=""
                         unoptimized
                       />

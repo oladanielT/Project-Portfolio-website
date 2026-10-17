@@ -95,11 +95,7 @@ export function VisionaryHeader({
           href={`${base}#top`}
           aria-label={`${c.hero.name}, home`}
         >
-          <OrbitMark />
-          <span>
-            {c.hero.name.split(" ")[0]}
-            <i>.</i>
-          </span>
+          <span className="v-logo-mark">O</span>
         </a>
         <nav className="v-desktop-nav" aria-label="Main navigation">
           {links.map(([id, label]) => (

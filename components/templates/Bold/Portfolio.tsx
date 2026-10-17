@@ -71,6 +71,7 @@ export default function Portfolio({
   const prefix = preview ? "/admin/preview" : "";
   const railRef = useRef<HTMLDivElement>(null);
   const [scrolled, setScrolled] = useState(false);
+  const [heroImgFailed, setHeroImgFailed] = useState(false);
   const [active, setActive] = useState("hero");
 
   useEffect(() => {
@@ -128,8 +129,6 @@ export default function Portfolio({
       <main id="top">
         <nav className={`site-nav ${scrolled ? "is-scrolled" : ""}`}>
           <Link href={`${prefix}#hero`} className="brand-logo" aria-label={`${c.hero.name} home`}>
-            <span className="brand-full">{c.hero.name}<i className="brand-dot" aria-hidden="true" /></span>
-            <small className="brand-title">{c.hero.title}</small>
             <span className="brand-monogram" aria-hidden="true">{initials[0]}</span>
           </Link>
           <div className="nav-center">
@@ -151,7 +150,7 @@ export default function Portfolio({
             <div className="hero-copy">
               <p className="hero-enter hero-chip">{c.hero.eyebrow || `Hello, I'm ${first}`} <span aria-hidden="true">👋</span></p>
               <h1 className="hero-enter">{c.hero.name}{c.hero.title && <em>{c.hero.title}</em>}</h1>
-              <p className="hero-enter hero-intro">{c.hero.intro}</p>
+              <p className="hero-enter hero-intro">{typeof c.hero.intro === "string" ? c.hero.intro.split("\n\n")[0] : c.hero.intro}</p>
               <div className="hero-enter hero-actions">
                 {c.sections.work && <Link href={`${prefix}#work`} className="button">{c.hero.ctaLabel || "View My Work"} <Arrow /></Link>}
                 {c.contact.cv
@@ -160,8 +159,8 @@ export default function Portfolio({
               </div>
             </div>
             <div className="hero-enter hero-portrait">
-              {c.hero.photo ? (
-                <Image src={c.hero.photo} alt={c.hero.name} width={640} height={760} className="hero-image" unoptimized priority style={{ objectPosition: (c.hero as any).photoPosition }} />
+              {c.hero.photo && !heroImgFailed ? (
+                <Image src={c.hero.photo} alt={c.hero.name} width={640} height={760} className="hero-image" unoptimized priority style={{ objectPosition: (c.hero as any).photoPosition }} onError={() => setHeroImgFailed(true)} />
               ) : (
                 <div className="hero-image hero-initials" aria-hidden="true">{initials}</div>
               )}

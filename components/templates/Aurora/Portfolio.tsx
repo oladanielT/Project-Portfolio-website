@@ -71,6 +71,7 @@ export default function Portfolio({
 }) {
   const rail = useRef<HTMLDivElement>(null);
   const mode = c.colorMode || "light";
+  const [heroImgFailed, setHeroImgFailed] = useState(false);
   const projects = c.sections.work
     ? [...c.projects].sort((a, b) => Number(b.featured) - Number(a.featured))
     : [];
@@ -93,9 +94,8 @@ export default function Portfolio({
   return (
     <div className={`aurora theme-${mode}`} id="top" data-template="aurora" data-theme={mode}>
       <header className="a-header">
-        <a href="#top" className="a-brand">
-          <span className="a-logo" aria-hidden="true" />
-          {c.hero.name}
+        <a href="#top" className="a-brand" aria-label={`${c.hero.name} home`}>
+          <span className="a-logo">O</span>
         </a>
         <nav className="a-nav" aria-label="Primary">
           {links.map(([label, href]) => (
@@ -120,13 +120,13 @@ export default function Portfolio({
               {c.hero.eyebrow && <Eyebrow>{c.hero.eyebrow}</Eyebrow>}
               <h1 id="a-hero-title">{c.hero.name}</h1>
               {c.hero.title && <p className="a-hero-title">{c.hero.title}</p>}
-              <p className="a-lead">{c.hero.intro}</p>
+              <p className="a-lead">{typeof c.hero.intro === "string" ? c.hero.intro.split("\n\n")[0] : c.hero.intro}</p>
               <a className="a-btn" href={projects.length ? "#work" : "#contact"}>
                 {projects.length ? c.hero.ctaLabel || "View my work" : "Let’s talk"} <Arrow />
               </a>
             </div>
             <div className="a-hero-image">
-              {c.hero.photo ? (
+              {c.hero.photo && !heroImgFailed ? (
                 <Image
                   src={c.hero.photo}
                   alt={c.hero.name}
@@ -134,6 +134,7 @@ export default function Portfolio({
                   unoptimized
                   sizes="(max-width: 760px) 88vw, 42vw"
                   style={{ objectPosition: c.hero.photoPosition, objectFit: "cover" }}
+                  onError={() => setHeroImgFailed(true)}
                 />
               ) : (
                 <span>{c.hero.name.split(/\s+/).slice(0, 2).map((part) => part[0]).join("")}</span>

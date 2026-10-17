@@ -41,7 +41,7 @@
 }
 
 [data-template="bento"] .bento-brand-dot {
-  color: var(--accent, #6366f1);
+  color: var(--accent, #10b981);
   font-size: 0.9rem;
 }
 
@@ -251,7 +251,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: var(--accent, #6366f1);
+  color: var(--accent, #10b981);
   margin-bottom: 0.25rem;
 }
 
@@ -269,7 +269,7 @@
   padding: 0.35rem 0.85rem;
   background: var(--surface-raised, rgba(255, 255, 255, 0.06));
   border-radius: 999px;
-  color: var(--accent, #6366f1);
+  color: var(--accent, #10b981);
   margin-bottom: 1.25rem;
   width: fit-content;
 }
@@ -285,7 +285,7 @@
 [data-template="bento"] .bento-hero-title {
   font-size: clamp(1.2rem, 2vw, 1.6rem);
   font-weight: 600;
-  color: var(--accent, #6366f1);
+  color: var(--accent, #10b981);
   margin: 0 0 1.25rem;
 }
 
@@ -319,7 +319,7 @@
 }
 
 [data-template="bento"] .bento-btn-primary {
-  background: var(--accent, #6366f1);
+  background: var(--accent, #10b981);
   color: #ffffff;
 }
 
@@ -368,7 +368,7 @@
   font-size: 5rem;
   font-weight: 800;
   background: var(--surface-raised, #1c1e28);
-  color: var(--accent, #6366f1);
+  color: var(--accent, #10b981);
 }
 
 [data-template="bento"] .bento-portrait-badge {
@@ -407,7 +407,7 @@
 }
 
 [data-template="bento"] .bento-stat-accent {
-  background: var(--accent, #6366f1);
+  background: var(--accent, #10b981);
   color: #ffffff;
 }
 
@@ -470,7 +470,7 @@
 
 [data-template="bento"] .bento-org-icon {
   font-size: 1.5rem;
-  color: var(--accent, #6366f1);
+  color: var(--accent, #10b981);
 }
 
 [data-template="bento"] .bento-org-name {
@@ -486,7 +486,7 @@
 
 [data-template="bento"] .bento-org-link {
   margin-left: auto;
-  color: var(--accent, #6366f1);
+  color: var(--accent, #10b981);
 }
 
 /* ───────── ABOUT ME ───────── */
@@ -516,7 +516,7 @@
   display: block;
   font-size: 3.5rem;
   font-weight: 800;
-  color: var(--accent, #6366f1);
+  color: var(--accent, #10b981);
   line-height: 1;
 }
 
@@ -651,8 +651,8 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--accent, #6366f1);
-  box-shadow: 0 0 8px var(--accent, #6366f1);
+  background: var(--accent, #10b981);
+  box-shadow: 0 0 8px var(--accent, #10b981);
 }
 
 [data-template="bento"] .bento-work-arrow {
@@ -672,9 +672,9 @@
 
 [data-template="bento"] .bento-work-card:hover .bento-work-arrow {
   transform: translate(3px, -3px);
-  background: var(--accent, #6366f1);
+  background: var(--accent, #10b981);
   color: #ffffff !important;
-  border-color: var(--accent, #6366f1);
+  border-color: var(--accent, #10b981);
 }
 
 :is([data-theme="pitch-black"], .theme-pitch-black) [data-template="bento"] .bento-work-card:hover .bento-work-arrow {
@@ -755,7 +755,7 @@
   font-size: 0.8rem;
   font-weight: 800;
   font-family: monospace;
-  color: var(--accent, #6366f1);
+  color: var(--accent, #10b981);
   margin-bottom: 0.75rem;
 }
 
@@ -804,7 +804,7 @@
   font-size: 0.75rem;
   font-weight: 800;
   letter-spacing: 0.1em;
-  color: var(--accent, #6366f1);
+  color: var(--accent, #10b981);
 }
 
 [data-template="bento"] .bento-process-step h3 {
@@ -842,7 +842,7 @@
 
 [data-template="bento"] .bento-tool-pill:hover {
   transform: translateY(-2px);
-  border-color: var(--accent, #6366f1);
+  border-color: var(--accent, #10b981);
 }
 
 [data-template="bento"] .bento-tool-logo {
@@ -855,7 +855,7 @@
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: var(--accent, #6366f1);
+  background: var(--accent, #10b981);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -880,7 +880,7 @@
 
 [data-template="bento"] .bento-quote-mark {
   font-size: 3rem;
-  color: var(--accent, #6366f1);
+  color: var(--accent, #10b981);
   line-height: 1;
   display: block;
 }
@@ -918,7 +918,7 @@
 }
 
 [data-template="bento"] .bento-faq-item[open] {
-  border-color: var(--accent, #6366f1);
+  border-color: var(--accent, #10b981);
 }
 
 [data-template="bento"] .bento-faq-question {
@@ -939,7 +939,7 @@
 
 [data-template="bento"] .bento-faq-plus {
   font-size: 1.5rem;
-  color: var(--accent, #6366f1);
+  color: var(--accent, #10b981);
   transition: transform 0.2s ease;
   line-height: 1;
 }
@@ -985,7 +985,7 @@
   display: block;
   font-size: 1.1rem;
   font-weight: 600;
-  color: var(--accent, #6366f1);
+  color: var(--accent, #10b981);
   text-decoration: none;
   word-break: break-all;
 }
@@ -1019,7 +1019,7 @@
 
 [data-template="bento"] .bento-inquiry-form input:focus,
 [data-template="bento"] .bento-inquiry-form textarea:focus {
-  border-color: var(--accent, #6366f1);
+  border-color: var(--accent, #10b981);
 }
 
 /* ───────── RESPONSIVE BREAKPOINTS ───────── */
@@ -1121,3 +1121,29 @@
   color: var(--foreground);
 }
 
+
+
+[data-template="bento"] .bento-logo-mark {
+  display: inline-grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #10b981;
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 800;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+[data-template="bento"] .bento-brand:hover .bento-logo-mark {
+  transform: scale(1.06);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+[data-template="bento"] .bento-hero-desc {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

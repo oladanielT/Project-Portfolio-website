@@ -2504,3 +2504,43 @@ img {
     flex-basis: min(86%, 24rem);
   }
 }
+
+
+/* Green Monogram & Hero Protection */
+.brand-logo-mark {
+  display: inline-grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #10b981;
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 800;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.brand:hover .brand-logo-mark {
+  transform: scale(1.06);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+.hero-intro {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.classic-fallback-avatar {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.05));
+  border: 2px solid #10b981;
+}
+.classic-fallback-avatar span {
+  font-size: 5rem;
+  font-weight: 800;
+  color: #10b981;
+}

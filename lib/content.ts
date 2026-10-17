@@ -28,6 +28,14 @@ const readPublished = unstable_cache(
 
     const parsed = siteSchema.parse(data.content);
     
+    // Self-healing: if hero/about photos point to inaccessible cloud endpoint, restore working photo
+    if (parsed.hero?.photo && parsed.hero.photo.includes("ccd2uu5i")) {
+      parsed.hero.photo = defaultContent.hero.photo;
+    }
+    if (parsed.about?.photo && parsed.about.photo.includes("ccd2uu5i")) {
+      parsed.about.photo = defaultContent.about.photo;
+    }
+
     // Self-healing: if projects from publication lack story blocks or challenge/approach/result, restore from seed
     parsed.projects = parsed.projects.map((p) => {
       const seedProject = defaultContent.projects.find((sp) => sp.slug === p.slug);
