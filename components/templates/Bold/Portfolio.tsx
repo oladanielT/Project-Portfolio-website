@@ -102,8 +102,11 @@ export default function Portfolio({
   const skills: string[] = (c.skills?.length ? c.skills : c.expertise.flatMap((e) => e.skills)).slice(0, 8);
 
   const links = [
-    ["#hero", "Home", true], ["#about", "About", showAbout], ["#work", "Work", c.sections.work],
-    ["#expertise", "Services", c.sections.expertise], ["#testimonials", "Reviews", c.sections.testimonial && c.testimonials.length > 0],
+    ["#hero", "Home", true], 
+    ["#about", "About", showAbout], 
+    ["#work", "Work", c.sections.work],
+    // ["#expertise", "Services", c.sections.expertise], 
+    ["#testimonials", "Reviews", c.sections.testimonial && c.testimonials.length > 0],
     ["#contact", "Contact", true],
   ].filter((l) => l[2]) as [string, string, boolean][];
 
@@ -137,7 +140,7 @@ export default function Portfolio({
             ))}
           </div>
           <Link href={`${prefix}#contact`} className="button nav-cta">
-            <span className="nav-cta-full">Let&apos;s Work Together</span>
+            <span className="nav-cta-full">Contact me</span>
             <span className="nav-cta-compact">Let&apos;s Talk</span>
             <Arrow />
           </Link>

@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "../Visionary/Media";
 import { defaultFaqs, type SiteContent } from "@/lib/schema";
 import TemplateFooter from "../common/TemplateFooter";
+import ContactForm from "@/components/ContactForm";
 import "../Visionary/styles.css";
 import "./styles.css";
 
@@ -63,6 +64,7 @@ function Testimonials({ items }: { items: SiteContent["testimonials"] }) {
 
 export default function Portfolio({
   content: c,
+  contactReady = false,
   preview = false,
 }: {
   content: SiteContent;
@@ -90,6 +92,17 @@ export default function Portfolio({
     c.sections.process && c.process.length > 0 && ["Journey", "#journey"],
     c.sections.testimonial && c.testimonials.length > 0 && ["Testimonials", "#testimonials"],
   ].filter(Boolean) as string[][];
+
+  const onSubmitContact = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = new FormData(e.currentTarget);
+    const name = form.get("name") || "";
+    const email = form.get("email") || "";
+    const subject = form.get("subject") || `Project inquiry from ${name}`;
+    const msg = form.get("message") || "";
+    const body = `${msg}\n\nFrom: ${name}\nEmail: ${email}`;
+    window.location.href = `mailto:${c.contact.email}?subject=${encodeURIComponent(String(subject))}&body=${encodeURIComponent(String(body))}`;
+  };
 
   return (
     <div className={`aurora theme-${mode}`} id="top" data-template="aurora" data-theme={mode}>
@@ -292,16 +305,90 @@ export default function Portfolio({
         )}
 
         {/* CTA */}
-        <section className="a-wave a-cta" aria-labelledby="a-cta-title">
+        <section id="contact" className="a-wave a-cta" aria-labelledby="a-cta-title">
           <Edge pos="top" />
           <div className="a-wrap a-cta-grid">
-            <div>
-              <Eyebrow>Let’s work together</Eyebrow>
-              <h2 id="a-cta-title">Have a <em>project</em> in mind?</h2>
+            <div className="a-cta-info">
+              <Eyebrow>Let&apos;s work together</Eyebrow>
+              <h2 id="a-cta-title">
+                {c.contact.heading ? (
+                  c.contact.heading
+                ) : (
+                  <>Have a <em>project</em> in mind?</>
+                )}
+              </h2>
+              <p className="a-body">
+                {c.contact.subheading ||
+                  "I'm always open to discussing new projects, creative ideas or opportunities to be part of your vision."}
+              </p>
+
+              <div className="a-contact-meta">
+                <a href={`mailto:${c.contact.email}`} className="a-link">
+                  {c.contact.email} <Arrow />
+                </a>
+                {c.contact.location && (
+                  <p className="a-location">📍 Based in {c.contact.location}</p>
+                )}
+              </div>
             </div>
-            <div>
-              <p className="a-body">I’m always open to discussing new projects, creative ideas or opportunities to be part of your vision.</p>
-              <a className="a-btn a-btn-solid" href="#contact">Let’s talk <Arrow /></a>
+
+            <div className="a-cta-form-wrap">
+              {c.contact.formEnabled && contactReady && !preview ? (
+                <ContactForm />
+              ) : (
+                <form className="a-contact-form" onSubmit={onSubmitContact}>
+                  <div className="a-form-row">
+                    <div className="a-contact-field">
+                      <label htmlFor="aurora-name">Your Name *</label>
+                      <input
+                        id="aurora-name"
+                        className="a-contact-input"
+                        name="name"
+                        type="text"
+                        placeholder="Jane Doe"
+                        required
+                        autoComplete="name"
+                      />
+                    </div>
+                    <div className="a-contact-field">
+                      <label htmlFor="aurora-email">Email Address *</label>
+                      <input
+                        id="aurora-email"
+                        className="a-contact-input"
+                        name="email"
+                        type="email"
+                        placeholder="jane@example.com"
+                        required
+                        autoComplete="email"
+                      />
+                    </div>
+                  </div>
+                  <div className="a-contact-field">
+                    <label htmlFor="aurora-subject">Subject</label>
+                    <input
+                      id="aurora-subject"
+                      className="a-contact-input"
+                      name="subject"
+                      type="text"
+                      placeholder="Project Inquiry / Collaboration"
+                    />
+                  </div>
+                  <div className="a-contact-field">
+                    <label htmlFor="aurora-message">Your Message *</label>
+                    <textarea
+                      id="aurora-message"
+                      className="a-contact-textarea"
+                      name="message"
+                      rows={4}
+                      placeholder="Tell me about your project, timeline, or idea..."
+                      required
+                    />
+                  </div>
+                  <button type="submit" className="a-btn a-btn-solid a-contact-submit">
+                    Send Message <Arrow />
+                  </button>
+                </form>
+              )}
             </div>
           </div>
           <Edge pos="bottom" />

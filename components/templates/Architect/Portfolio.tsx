@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { defaultFaqs, type SiteContent } from "@/lib/schema";
@@ -34,6 +34,93 @@ const SvgShapes = () => (
   </div>
 );
 
+/* ───────── Testimonials carousel ─────────
+   One card at a time, crossfade, arrows + dots.
+   Autoplay pauses on hover/focus and is off for reduced motion.
+   Delete the useEffect below for manual navigation only. */
+type Testimonial = { quote: string; name: string; role?: string };
+
+const TESTIMONIAL_AUTOPLAY_MS = 7000;
+
+function Testimonials({ items }: { items: Testimonial[] }) {
+  const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const count = items.length;
+
+  const go = (i: number) => setActive((i + count) % count);
+
+  useEffect(() => {
+    if (count < 2 || paused) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const id = setTimeout(() => go(active + 1), TESTIMONIAL_AUTOPLAY_MS);
+    return () => clearTimeout(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [active, paused, count]);
+
+  return (
+    <div
+      className="testimonials-carousel"
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="Testimonials"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocus={() => setPaused(true)}
+      onBlur={() => setPaused(false)}
+    >
+      {/* All slides share one grid cell, so the stage is as tall as the
+          tallest card and nothing jumps when the slide changes. */}
+      <div className="tm-stage" aria-live={paused ? "polite" : "off"}>
+        {items.map((t, i) => (
+          <div
+            key={i}
+            className={`testimonial-card-large tm-slide${i === active ? " is-active" : ""}`}
+            aria-hidden={i !== active}
+          >
+            <p className="quote-mark" aria-hidden="true">“</p>
+            <p className="quote-text">{t.quote}</p>
+            <div className="quote-author">
+              <div className="author-info">
+                <h4>{t.name}</h4>
+                {t.role && <span>{t.role}</span>}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {count > 1 && (
+        <div className="tm-controls">
+          <button type="button" className="tm-arrow" onClick={() => go(active - 1)} aria-label="Previous testimonial">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+          </button>
+
+          <div className="tm-dots">
+            {items.map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                className={`tm-dot${i === active ? " is-active" : ""}`}
+                onClick={() => go(i)}
+                aria-label={`Show testimonial ${i + 1}`}
+                aria-current={i === active}
+              />
+            ))}
+          </div>
+
+          <button type="button" className="tm-arrow" onClick={() => go(active + 1)} aria-label="Next testimonial">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M9 18l6-6-6-6" />
+            </svg>
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function Portfolio({
   content: c,
   contactReady,
@@ -58,13 +145,13 @@ export default function Portfolio({
   };
 
   const navLinks = [
-    { href: "#hero", label: "Home" },
+    // { href: "#hero", label: "Home" },
     ...(c.sections.about ? [{ href: "#about", label: "About" }] : []),
     ...(c.sections.work && projects.length > 0 ? [{ href: "#work", label: "Work" }] : []),
     ...(c.sections.expertise && c.expertise?.length > 0 ? [{ href: "#services", label: "Services" }] : []),
-    ...(c.sections.process && c.process?.length > 0 ? [{ href: "#process", label: "Process" }] : []),
+    // ...(c.sections.process && c.process?.length > 0 ? [{ href: "#process", label: "Process" }] : []),
     ...(c.sections.tools && c.tools?.length > 0 ? [{ href: "#tools", label: "Tools" }] : []),
-    ...(c.sections.faqs && faqs.length > 0 ? [{ href: "#faqs", label: "FAQs" }] : []),
+    // ...(c.sections.faqs && faqs.length > 0 ? [{ href: "#faqs", label: "FAQs" }] : []),
     { href: "#contact", label: "Contact" },
   ];
 
@@ -274,10 +361,10 @@ export default function Portfolio({
         {c.sections.tools && c.tools && c.tools.length > 0 && (
           <section id="tools" className="partners-section">
             <div className="partners-header">
-              <span className="section-eyebrow">PRODUCTIVITY STACK</span>
+              <span className="section-eyebrow text-center">PRODUCTIVITY STACK</span>
               <h2 className="section-title text-center">Tools &amp; Infrastructure</h2>
             </div>
-            <div className="architect-tools-grid">
+            <div className="architect-tools-grid ">
               {c.tools.map((tool, i) => (
                 <div key={`tool-${i}`} className="architect-tool-card">
                   <div className="tool-icon-wrapper">
@@ -301,22 +388,7 @@ export default function Portfolio({
               <span className="section-eyebrow">ENDORSEMENTS</span>
               <h2 className="section-title">What Collaborators Say</h2>
             </div>
-            <div className="testimonials-carousel">
-              <div className="testimonials-track centered gap-4">
-                {c.testimonials.map((testimonial, index) => (
-                  <div className="testimonial-card-large" key={index}>
-                    <p className="quote-mark">“</p>
-                    <p className="quote-text">{testimonial.quote}</p>
-                    <div className="quote-author">
-                      <div className="author-info">
-                        <h4>{testimonial.name}</h4>
-                        <span>{testimonial.role}</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <Testimonials items={c.testimonials} />
           </section>
         )}
 

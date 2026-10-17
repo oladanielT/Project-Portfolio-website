@@ -27,47 +27,68 @@
   box-sizing: border-box;
 }
 
-/* ───────── MARQUEE ───────── */
-.tf-marquee {
+/* ───────── MARQUEE ─────────
+   Text only, no background, fades out at both ends, 8xl width.
+   Styles both the tf-* and nx-* class names, so it works whichever
+   the Marquee component renders. Text inherits the footer's color,
+   so it follows light/dark mode and every variant below.
+   `footer.tf-footer` is more specific than the noir marquee rules,
+   so it wins wherever both stylesheets are loaded. */
+footer.tf-footer .tf-marquee,
+footer.tf-footer .nx-marquee {
   position: relative;
   overflow: hidden;
-  background: var(--tf-marquee-bg, rgba(255, 255, 255, 0.03));
-  color: var(--tf-marquee-text, var(--tf-text, #ffffff));
-  border-bottom: 1px solid var(--tf-border, rgba(255, 255, 255, 0.08));
-  padding: 1.1rem 0;
+  width: min(88rem, calc(100% - 2.5rem));   /* 8xl, with side gutters on small screens */
+  margin-inline: auto;
+  padding: 1.25rem 0;
+  background: none;
+  border: 0;
+  color: inherit;
   user-select: none;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
 }
 
-.tf-marquee-track {
+footer.tf-footer .tf-marquee-track,
+footer.tf-footer .nx-marquee-track {
   display: flex;
   width: max-content;
-  animation: tf-scroll 32s linear infinite;
+  animation: tf-scroll 40s linear infinite;
 }
 
-.tf-marquee:hover .tf-marquee-track {
+footer.tf-footer .tf-marquee:hover .tf-marquee-track,
+footer.tf-footer .nx-marquee:hover .nx-marquee-track {
   animation-play-state: paused;
 }
 
-.tf-marquee-group {
+footer.tf-footer .tf-marquee-group,
+footer.tf-footer .nx-marquee-group {
   display: flex;
   flex: none;
   align-items: center;
 }
 
-.tf-marquee-item {
+footer.tf-footer .tf-marquee-item,
+footer.tf-footer .nx-marquee-item {
   display: inline-flex;
   align-items: center;
   gap: 1.75rem;
   padding-right: 1.75rem;
-  font-size: clamp(1rem, 2vw, 1.35rem);
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-size: clamp(0.78rem, 1.3vw, 0.9rem);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
   white-space: nowrap;
+  color: inherit;
+  opacity: 0.6;
 }
 
-.tf-marquee-item svg {
+footer.tf-footer .tf-marquee-item svg,
+footer.tf-footer .nx-marquee-item svg {
+  width: 10px;
+  height: 10px;
+  flex: none;
   color: var(--tf-accent, #3b82f6);
-  opacity: 0.8;
 }
 
 @keyframes tf-scroll {
@@ -85,8 +106,11 @@
   margin: 0 auto;
 }
 
+/* Divider sits here (not on the marquee) so the edge fade
+   doesn't fade the line. */
 .tf-inner {
   padding: clamp(3rem, 6vw, 4.5rem) 0 2rem;
+  border-top: 1px solid var(--tf-border, rgba(255, 255, 255, 0.08));
 }
 
 .tf-top {
@@ -466,5 +490,12 @@
   .tf-bottom {
     flex-direction: column;
     align-items: flex-start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  footer.tf-footer .tf-marquee-track,
+  footer.tf-footer .nx-marquee-track {
+    animation: none;
   }
 }

@@ -28,15 +28,15 @@ export default function Portfolio({
   const faqs = (c.faqs && c.faqs.length > 0) ? c.faqs : defaultFaqs;
 
   const navLinks = [
-    { href: "#hero", label: "Home" },
-    ...(c.sections.organizations && c.organizations?.length > 0 ? [{ href: "#organizations", label: "Partners" }] : []),
+    // { href: "#hero", label: "Home" },
+    // ...(c.sections.organizations && c.organizations?.length > 0 ? [{ href: "#organizations", label: "Partners" }] : []),
     ...(c.sections.about ? [{ href: "#about", label: "About" }] : []),
     ...(c.sections.work && projects.length > 0 ? [{ href: "#work", label: "Work" }] : []),
     ...(c.sections.expertise && c.expertise?.length > 0 ? [{ href: "#services", label: "Services" }] : []),
-    ...(c.sections.process && c.process?.length > 0 ? [{ href: "#process", label: "Process" }] : []),
-    ...(c.sections.tools && c.tools?.length > 0 ? [{ href: "#tools", label: "Toolkit" }] : []),
+    // ...(c.sections.process && c.process?.length > 0 ? [{ href: "#process", label: "Process" }] : []),
+    // ...(c.sections.tools && c.tools?.length > 0 ? [{ href: "#tools", label: "Toolkit" }] : []),
     ...(c.sections.testimonial && c.testimonials?.length > 0 ? [{ href: "#testimonials", label: "Reviews" }] : []),
-    ...(c.sections.faqs && faqs.length > 0 ? [{ href: "#faqs", label: "FAQs" }] : []),
+    // ...(c.sections.faqs && faqs.length > 0 ? [{ href: "#faqs", label: "FAQs" }] : []),
     { href: "#contact", label: "Contact" },
   ];
 
@@ -118,7 +118,7 @@ export default function Portfolio({
             {c.hero.name}
           </h1>
           {c.hero.title && (
-            <h2 className="bento-hero-title">{c.hero.title}</h2>
+            <h2 className="bento-hero-title">{c.hero.title}</h2>  
           )}
           <p className="bento-hero-desc">
             {typeof c.hero.intro === "string" ? c.hero.intro.split("\n\n")[0] : c.hero.intro}

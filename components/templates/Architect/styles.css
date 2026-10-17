@@ -592,10 +592,6 @@ html[data-template="architect"][data-theme="candy"] {
   width: 100%;
   padding: 2rem 5%;
 }
-.testimonials-track.centered {
-  display: flex;
-  justify-content: center;
-}
 .testimonial-card-large {
   width: 800px;
   max-width: 90vw;
@@ -619,6 +615,97 @@ html[data-template="architect"][data-theme="candy"] {
 .quote-author {
   display: flex;
   justify-content: center;
+}
+
+/* Testimonials carousel: one card at a time, crossfade, arrows + dots */
+
+/* every slide sits in the same grid cell, so height = tallest card */
+.tm-stage {
+  display: grid;
+  justify-items: center;
+}
+
+.tm-slide {
+  grid-area: 1 / 1;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  /* visibility flips after the fade-out finishes */
+  transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s linear 0.5s;
+}
+
+.tm-slide.is-active {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition-delay: 0s;
+}
+
+.tm-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.25rem;
+  margin-top: 1.75rem;
+}
+
+.tm-arrow {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.tm-arrow:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  transform: scale(1.06);
+}
+
+.tm-dots {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tm-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-text) 25%, transparent);
+  cursor: pointer;
+  transition: width 0.3s ease, background 0.3s ease;
+}
+
+.tm-dot:hover {
+  background: color-mix(in srgb, var(--color-text) 50%, transparent);
+}
+
+.tm-dot.is-active {
+  width: 1.5rem;
+  background: var(--color-accent);
+}
+
+.tm-arrow:focus-visible,
+.tm-dot:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tm-slide,
+  .tm-slide.is-active {
+    transition: none;
+    transform: none;
+  }
 }
 
 /* --- CONTACT SECTION --- */
@@ -736,17 +823,6 @@ html[data-template="architect"][data-theme="candy"] {
     min-height: 300px;
     display: block;
   }
-}
-
-@keyframes auto-swipe-single {
-  0% { transform: translateX(50vw); opacity: 0; }
-  10% { transform: translateX(0); opacity: 1; }
-  90% { transform: translateX(0); opacity: 1; }
-  100% { transform: translateX(-50vw); opacity: 0; }
-}
-
-.testimonials-track.centered .testimonial-card-large {
-  animation: auto-swipe-single 12s ease-in-out infinite;
 }
 
 /* --- SHOWCASE SKILLS --- */

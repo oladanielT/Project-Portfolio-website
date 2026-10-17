@@ -145,17 +145,6 @@ export default function TemplateFooter({
       <Marquee items={marqueeItems} />
       
       <div className="tf-wrap tf-inner">
-        <div className="tf-top">
-          <div className="tf-top-heading">
-            <span className="tf-eyebrow">Get in touch</span>
-            <h2 className="tf-title">
-              Let&apos;s <span className="tf-accent">Connect</span> and build together
-            </h2>
-          </div>
-          <a href={`mailto:${c.contact.email}`} className="tf-cta-btn">
-            Say Hello <span className="tf-btn-ico"><Arrow /></span>
-          </a>
-        </div>
 
         <div className="tf-cols">
           {/* Column 1: Brand & Profile */}
