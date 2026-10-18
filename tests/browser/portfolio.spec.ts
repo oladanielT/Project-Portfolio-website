@@ -140,7 +140,7 @@ test("desktop and mobile portraits load and layouts remain contained", async ({
   async function prepareFullScreenshot() {
     await page.locator("img").evaluateAll((images) => {
       images.forEach((image) => {
-        image.loading = "eager";
+        (image as HTMLImageElement).loading = "eager";
       });
     });
     await expect
@@ -149,7 +149,7 @@ test("desktop and mobile portraits load and layouts remain contained", async ({
           page
             .locator("img")
             .evaluateAll((images) =>
-              images.every((image) => image.complete && image.naturalWidth > 0),
+              images.every((image) => (image as HTMLImageElement).complete && (image as HTMLImageElement).naturalWidth > 0),
             ),
         { timeout: 20000 },
       )

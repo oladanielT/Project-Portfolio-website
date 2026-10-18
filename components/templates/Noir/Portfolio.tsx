@@ -291,8 +291,8 @@ export default function Portfolio({
   </span>
 
   <div className="nx-stat-card">
-    <strong>{c.hero.statValue ?? "5+"}</strong>
-    <span>{c.hero.statLabel ?? "Years building for the web"}</span>
+    <strong>{hero.statValue ?? c.about?.stat?.value ?? "5+"}</strong>
+    <span>{hero.statLabel ?? c.about?.stat?.label ?? "Years building for the web"}</span>
   </div>
 </div>
 
